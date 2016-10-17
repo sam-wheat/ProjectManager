@@ -6,20 +6,14 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>6f82cb3b-209a-4ed1-ab3a-0670166accd8</ProjectGuid>
-    <RootNamespace>ProjectManager.Core</RootNamespace>
+    <ProjectGuid>440a4f43-d4d0-4d06-a48b-881f30a38290</ProjectGuid>
+    <RootNamespace>ProjectManager.API</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
-  <ItemGroup>
-    <DnxInvisibleCompile Include="DataConfigManager.cs" />
-    <DnxInvisibleCompile Include="ExtensionMethods.cs" />
-    <DnxInvisibleCompile Include="NLogger.cs" />
-    <DnxInvisibleCompile Include="Utilities.cs" />
-  </ItemGroup>
-  <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(VSToolsPath)\DotNet.Web\Microsoft.DotNet.Web.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>

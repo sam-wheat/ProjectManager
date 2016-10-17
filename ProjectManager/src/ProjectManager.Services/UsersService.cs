@@ -1,0 +1,113 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Data;
+using System.Data.Entity;
+using ProjectManager.Model;
+using ProjectManager.BusinessLogic.Presentation;
+
+namespace ProjectManager.BusinessLogic.Services
+{
+    public partial class DataServices
+    {
+        public User GetUser(string userName, string password)
+        {
+            User user = db.Users.SingleOrDefault(x => x.Name == userName && x.Password == password && x.IsActive);
+            return user;
+        }
+
+        public int SaveUser(User user, out string errorMsg)
+        {
+            errorMsg = "";
+
+            if(! ValidateUser(user, out errorMsg))
+                return 0;
+
+            if (user.ID == 0)
+                db.Users.Add(user);
+            else
+                db.AttachAsModfied(user);
+
+            return db.SaveChanges();
+        }
+
+        public bool ValidateUser(User user, out string errorMsg)
+        {
+            errorMsg = "";
+
+            if (string.IsNullOrEmpty(user.Name))
+                errorMsg = "User name cannot be blank.";
+            else if (string.IsNullOrEmpty(user.Password))
+                errorMsg = "User password cannot be blank.";
+            else if (db.Users.Any(x => x.Name == user.Name && x.ID != user.ID))
+                errorMsg = "A user named " + user.Name + " already exists.  Choose another name.";
+
+            return string.IsNullOrEmpty(errorMsg);
+        }
+
+        public int DeleteUser(User user)
+        {
+            db.Projects.Where(x => x.UserID == user.ID).ToList().ForEach(x => deleteProject(x.ID));
+            db.Contacts.Where(x => x.UserID == user.ID).ToList().ForEach(x => deleteContact(x));
+            db.Users.Remove(user);
+            return db.SaveChanges();
+        }
+
+        public int DeleteUserByID(int userID)
+        {
+            int saveCount = 0;
+            User user = db.Users.SingleOrDefault(x => x.ID == userID);
+         
+            if (user != null)
+                saveCount = DeleteUser(user);
+            
+            return saveCount;
+        }
+
+        public User[] GetUsers(bool activeOnly = true)
+        {
+            return db.Users.Where(x => x.IsActive || !activeOnly).ToArray();
+        }
+
+        public PresUser[] SearchUsers(int pageIndex, int pageSize, string sortKey, string sortDir, out int totalResultCount)
+        {
+            var query = db.Users.Where(x => true);
+
+            if (sortDir == "ASC")
+            {
+                if (sortKey == "Name")
+                    query = query.OrderBy(x => x.Name);
+                else
+                    query = query.OrderBy(x => x.IsActive).ThenBy(x => x.Name);
+            }
+            else if (sortDir == "DESC")
+            {
+                if (sortKey == "Name")
+                    query = query.OrderByDescending(x => x.Name);
+                else
+                    query = query.OrderByDescending(x => x.IsActive).ThenByDescending(x => x.Name);
+            }
+            else
+                throw new Exception("sortDir not recognized: " + sortDir);
+
+            totalResultCount = query.Count();
+
+            query = query
+               .Skip((pageIndex - 1) * pageSize)
+               .Take(pageSize);
+
+            return query
+                .ToList()
+                .Select(x => new PresUser(x))
+                .ToArray();
+        }
+
+
+        public bool VerifyLogin(int userID, string password)
+        {
+            return db.Users.Any(x => x.ID == userID && x.Password == password && x.IsActive);
+        }
+    }
+}
