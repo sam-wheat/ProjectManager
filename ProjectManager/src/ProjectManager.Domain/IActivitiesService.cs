@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ServiceModel;
-using ProjectManager.Model;
+using ProjectManager.Model.Domain;
+using ProjectManager.Model.Presentation;
 
 namespace ProjectManager.Domain
 {
-    public interface IActivitiesService
+    public interface IActivitiesService : IDisposable
     {
+        [OperationContract]
+        void DeleteActivity(Activity activity);
+        [OperationContract]
+        void AttachActivity(Activity activity);
         [OperationContract]
         Activity GetActivity(int id);
         [OperationContract]
@@ -20,7 +25,9 @@ namespace ProjectManager.Domain
         [OperationContract]
         int ModifyActivity(Activity activity);
         [OperationContract]
-        int DeleteActivity(Activity activity);
+        int DeleteActivityAndSave(Activity activity);
+        [OperationContract]
+        int DeleteActivities(IEnumerable<Activity> activities);
         [OperationContract]
         int DeleteActivityByID(int activityID);
         [OperationContract]

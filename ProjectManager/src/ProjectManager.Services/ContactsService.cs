@@ -3,13 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProjectManager.Model;
-using ProjectManager.BusinessLogic.Presentation;
+using Microsoft.EntityFrameworkCore;
+using ProjectManager.Model.Domain;
+using ProjectManager.Model.Presentation;
+using ProjectManager.Domain;
 
-namespace ProjectManager.BusinessLogic.Services
+namespace ProjectManager.Services
 {
-    public partial class DataServices
+    public class ContactsService : BaseService, IContactsService
     {
+        private IDefaultContactsService defaultContactsService;
+
+        public ContactsService(MyDbContextOptions options, IDefaultContactsService defaultContactsService) : base(options)
+        {
+            this.defaultContactsService = defaultContactsService;
+        }
+
         private void attachContact(Contact contact)
         {
             if (contact.ID == 0)
@@ -18,7 +27,7 @@ namespace ProjectManager.BusinessLogic.Services
                 db.AttachAsModfied(contact);
         }
 
-        private void deleteContact(Contact contact)
+        public void DeleteContact(Contact contact)
         {
             db.AttachAsDeleted(contact);
         }
@@ -42,10 +51,10 @@ namespace ProjectManager.BusinessLogic.Services
             return result;
         }
 
-        public int DeleteContact(int contactID)
+        public int DeleteContactAndSave(int contactID)
         {
-            deleteDefaultContacts(db.DefaultContacts.Where(x => x.ContactID == contactID));
-            deleteContact(db.Contacts.SingleOrDefault(x => x.ID == contactID));
+            defaultContactsService.DeleteDefaultContacts(db.DefaultContacts.Where(x => x.ContactID == contactID));
+            DeleteContact(db.Contacts.SingleOrDefault(x => x.ID == contactID));
             return db.SaveChanges();
         }
 
@@ -105,8 +114,8 @@ namespace ProjectManager.BusinessLogic.Services
         public PresDefaultContact[] GetPresDefaultContactsForProject(int projectID)
         {
             var list = db.DefaultContacts
-                .Include("Contact")
-                .Include("Project")
+                .Include(x => x.Contact)
+                .Include(x => x.Project)
                 .Where(x => x.ProjectID == projectID).ToList();
 
             return list.Select(x => new PresDefaultContact(x))
@@ -119,7 +128,7 @@ namespace ProjectManager.BusinessLogic.Services
             
             if (String.IsNullOrEmpty(contact.Name)) 
             {
-                errorMsg = "Contact name cannnot be blank.";
+                errorMsg = "Contact name cannot be blank.";
                 return false;
             }
             return true;

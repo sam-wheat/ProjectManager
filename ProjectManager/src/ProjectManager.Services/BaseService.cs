@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Blog.Core;
-
 
 namespace ProjectManager.Services
 {
     public class BaseService : IDisposable
     {
-        protected Db db;
+        internal Db db;
 
         public BaseService(MyDbContextOptions options)
         {

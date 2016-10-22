@@ -2,16 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Data.Entity;
 using System.Threading.Tasks;
-using ProjectManager.Model;
-using ProjectManager.BusinessLogic.Presentation;
+using Microsoft.EntityFrameworkCore;
+using ProjectManager.Model.Domain;
+using ProjectManager.Model.Presentation;
+using ProjectManager.Domain;
 
-namespace ProjectManager.BusinessLogic.Services
+namespace ProjectManager.Services
 {
-    public partial class DataServices
+    public class ActivitiesService : BaseService, IActivitiesService
     {
-        private void attachActivity(Activity activity)
+        
+
+        public ActivitiesService(MyDbContextOptions options) : base(options)
+        {
+
+        }
+
+        public void AttachActivity(Activity activity)
         {
             if (activity.ID == 0)
                 db.Activities.Add(activity);
@@ -19,7 +27,7 @@ namespace ProjectManager.BusinessLogic.Services
                 db.AttachAsModfied(activity); 
         }
 
-        private void deleteActivity(Activity activity)
+        public void DeleteActivity(Activity activity)
         {
             if (db.Entry(activity).State == EntityState.Detached)
                 db.AttachAsDeleted(activity);
@@ -29,7 +37,7 @@ namespace ProjectManager.BusinessLogic.Services
 
         private void deleteActivities(IEnumerable<Activity> activities)
         {
-            activities.ToList().ForEach(a => deleteActivity(a));
+            activities.ToList().ForEach(a => DeleteActivity(a));
         }
 
         public Activity GetActivity(int id)
@@ -39,7 +47,7 @@ namespace ProjectManager.BusinessLogic.Services
 
         public PresActivity[] SearchActivities(int userID, int projectID, int pageIndex, int pageSize, string sortKey, string sortDir, out int totalResultCount)
         {
-            var query = db.Activities.Include("Project")
+            var query = db.Activities.Include(x => x.Project)
                .Where(x => (x.UserID == userID || userID == 0) && (x.ProjectID == projectID || projectID == 0));
 
             if (sortDir == "ASC")
@@ -86,9 +94,17 @@ namespace ProjectManager.BusinessLogic.Services
             throw new NotImplementedException();
         }
 
-        public int DeleteActivity(Activity activity)
+        public int DeleteActivityAndSave(Activity activity)
         {
-            deleteActivity(activity);
+            DeleteActivity(activity);
+            return db.SaveChanges();
+        }
+
+        public int DeleteActivities(IEnumerable<Activity> activities)
+        {
+            foreach (Activity activity in activities)
+                DeleteActivity(activity);
+
             return db.SaveChanges();
         }
 
@@ -99,7 +115,7 @@ namespace ProjectManager.BusinessLogic.Services
             
             if (a != null)
             {
-                deleteActivity(a);
+                DeleteActivity(a);
                 saveCount = db.SaveChanges();
             }
             return saveCount;

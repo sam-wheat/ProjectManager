@@ -4,14 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
-using System.Data.Entity;
-using ProjectManager.Model;
-using ProjectManager.BusinessLogic.Presentation;
+using Microsoft.EntityFrameworkCore;
+using ProjectManager.Model.Domain;
+using ProjectManager.Model.Presentation;
+using ProjectManager.Domain;
 
-namespace ProjectManager.BusinessLogic.Services
+namespace ProjectManager.Services
 {
-    public partial class DataServices
+    public class UsersService : BaseService, IUsersService
     {
+        private IContactsService ContactsService;
+        private IProjectsService ProjectsService;
+
+        public UsersService(MyDbContextOptions options, IProjectsService projectsService, IContactsService contactsService) : base(options)
+        {
+            ContactsService = contactsService;
+            ProjectsService = projectsService;
+        }
+
         public User GetUser(string userName, string password)
         {
             User user = db.Users.SingleOrDefault(x => x.Name == userName && x.Password == password && x.IsActive);
@@ -49,8 +59,8 @@ namespace ProjectManager.BusinessLogic.Services
 
         public int DeleteUser(User user)
         {
-            db.Projects.Where(x => x.UserID == user.ID).ToList().ForEach(x => deleteProject(x.ID));
-            db.Contacts.Where(x => x.UserID == user.ID).ToList().ForEach(x => deleteContact(x));
+            db.Projects.Where(x => x.UserID == user.ID).ToList().ForEach(x => ProjectsService.DeleteProject(x.ID));
+            db.Contacts.Where(x => x.UserID == user.ID).ToList().ForEach(x => ContactsService.DeleteContact(x));
             db.Users.Remove(user);
             return db.SaveChanges();
         }

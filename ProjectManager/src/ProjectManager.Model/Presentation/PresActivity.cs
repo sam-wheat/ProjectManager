@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProjectManager.Model;
-using System.Runtime.Serialization;
 using ProjectManager.Model.Domain;
 
 namespace ProjectManager.Model.Presentation

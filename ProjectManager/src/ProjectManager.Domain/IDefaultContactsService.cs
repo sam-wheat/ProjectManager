@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ServiceModel;
-using ProjectManager.Model;
+using ProjectManager.Model.Domain;
+using ProjectManager.Model.Presentation;
 
 namespace ProjectManager.Domain
 {
-    public interface IDefaultContactsService
+    public interface IDefaultContactsService : IDisposable
     {
+        [OperationContract]
+        void AttachDefaultContact(DefaultContact defContact);
+        [OperationContract]
+        void DeleteDefaultContact(DefaultContact defContact);
         [OperationContract]
         DefaultContact[] GetDefaultContactsForProject(int projectID);
         [OperationContract]
@@ -16,8 +21,9 @@ namespace ProjectManager.Domain
         [OperationContract]
         int ModifyDefaultContact(DefaultContact defContact);
         [OperationContract]
-        int DeleteDefaultContact(DefaultContact defContact);
+        int DeleteDefaultContactAndSave(DefaultContact defContact);
         [OperationContract]
-        bool ValidateContact(Contact contact, out string errorMsg);
+        void DeleteDefaultContacts(IEnumerable<DefaultContact> defContacts);
+        
     }
 }

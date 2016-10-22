@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ServiceModel;
 using ProjectManager.Model;
+using ProjectManager.Model.Domain;
+using ProjectManager.Model.Presentation;
 
 namespace ProjectManager.Domain
 {
-    public interface IUsersService
+    public interface IUsersService : IDisposable
     {
         [OperationContract]
         User GetUser(string userName, string password);

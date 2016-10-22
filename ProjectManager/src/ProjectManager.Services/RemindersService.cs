@@ -2,15 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Data.Entity;
 using System.Threading.Tasks;
-using ProjectManager.BusinessLogic.Presentation;
-using ProjectManager.Model;
+using Microsoft.EntityFrameworkCore;
+using ProjectManager.Model.Domain;
+using ProjectManager.Model.Presentation;
+using ProjectManager.Domain;
 
-namespace ProjectManager.BusinessLogic.Services
+namespace ProjectManager.Services
 {
-    public partial class DataServices
+    public class RemindersService : BaseService, IRemindersService
     {
+        public RemindersService(MyDbContextOptions options) : base(options)
+        {
+
+        }
+
         public Reminder GetReminder(int id)
         {
             return db.Reminders.SingleOrDefault(x => x.ID == id);
@@ -32,7 +38,7 @@ namespace ProjectManager.BusinessLogic.Services
 
         public PresReminder[] GetActivePresReminders(int userID, int pageIndex, int pageSize, string sortKey, string sortDir, out int totalResultCount)
         {
-            var query = db.Reminders.Include("Project")
+            var query = db.Reminders.Include(x => x.Project)
                .Where(x => x.UserID == userID && ! x.IsComplete);
 
             if(sortDir == "ASC")
@@ -87,7 +93,7 @@ namespace ProjectManager.BusinessLogic.Services
             return result;
         }
 
-        private void attachReminder(Reminder reminder)
+        public void AttachReminder(Reminder reminder)
         {
             if (reminder.ID == 0)
                 db.Reminders.Add(reminder);
@@ -95,7 +101,7 @@ namespace ProjectManager.BusinessLogic.Services
                 db.AttachAsModfied(reminder);
         }
 
-        private void deleteReminder(Reminder reminder)
+        public void DeleteReminder(Reminder reminder)
         {
             if (db.Entry(reminder).State == EntityState.Detached)
                 db.AttachAsDeleted(reminder);
@@ -103,19 +109,19 @@ namespace ProjectManager.BusinessLogic.Services
                 db.Entry(reminder).State = EntityState.Deleted;
         }
 
-        private void deleteReminders(IEnumerable<Reminder> reminders)
+        public void DeleteReminders(IEnumerable<Reminder> reminders)
         {
-            reminders.ToList().ForEach(r => deleteReminder(r));
+            reminders.ToList().ForEach(r => DeleteReminder(r));
         }
 
-        public int DeleteReminder(int reminderID)
+        public int DeleteReminderAndSave(int reminderID)
         {
             int saveCount = 0;
             Reminder r = GetReminder(reminderID);
 
             if (r != null)
             {
-                deleteReminder(r);
+                DeleteReminder(r);
                 saveCount = db.SaveChanges();
             }
             return saveCount;
@@ -129,7 +135,7 @@ namespace ProjectManager.BusinessLogic.Services
             if (r != null)
             {
                 r.IsComplete = !r.IsComplete;
-                attachReminder(r);
+                AttachReminder(r);
                 saveCount = db.SaveChanges();
             }
             return saveCount;

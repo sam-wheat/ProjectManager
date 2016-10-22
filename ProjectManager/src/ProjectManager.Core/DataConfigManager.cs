@@ -7,7 +7,6 @@ using System.IO;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
-using ProjectManager.Domain;
 
 namespace ProjectManager.Core
 {

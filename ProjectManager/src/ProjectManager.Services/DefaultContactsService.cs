@@ -2,15 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Data.Entity;
 using System.Threading.Tasks;
-using ProjectManager.Model;
+using Microsoft.EntityFrameworkCore;
+using ProjectManager.Model.Domain;
+using ProjectManager.Model.Presentation;
+using ProjectManager.Domain;
 
-namespace ProjectManager.BusinessLogic.Services
+namespace ProjectManager.Services
 {
-    public partial class DataServices
+    public class DefaultContactsService : BaseService, IDefaultContactsService
     {
-        private void attachDefaultContact(DefaultContact defContact)
+        public DefaultContactsService(MyDbContextOptions options) : base(options)
+        {
+
+        }
+
+        public void AttachDefaultContact(DefaultContact defContact)
         {
             //if (defContact.ProjectID == 0 || defContact.ContactID == 0)
             //    throw new Exception("ProjectID and ContactID must be greater than zero.");
@@ -24,23 +31,28 @@ namespace ProjectManager.BusinessLogic.Services
             throw new NotImplementedException();
         }
 
+        public PresDefaultContact[] GetPresDefaultContactsForProject(int projectID)
+        {
+            throw new NotImplementedException();
+        }
+
         public int ModifyDefaultContact(DefaultContact defContact)
         {
             throw new NotImplementedException();
         }
 
-        public int DeleteDefaultContact(DefaultContact defContact)
+        public int DeleteDefaultContactAndSave(DefaultContact defContact)
         {
-            deleteDefaultContact(defContact);
+            DeleteDefaultContact(defContact);
             return db.SaveChanges();
         }
 
-        private void deleteDefaultContacts(IEnumerable<DefaultContact> defContacts)
+        public void DeleteDefaultContacts(IEnumerable<DefaultContact> defContacts)
         {
-            defContacts.ToList().ForEach(d => deleteDefaultContact(d));
+            defContacts.ToList().ForEach(d => DeleteDefaultContact(d));
         }
 
-        private void deleteDefaultContact(DefaultContact defContact)
+        public void DeleteDefaultContact(DefaultContact defContact)
         {
             if (db.Entry(defContact).State == EntityState.Detached)
                 db.AttachAsDeleted(defContact);

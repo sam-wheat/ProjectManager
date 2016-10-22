@@ -16,10 +16,7 @@
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <ItemGroup>
-    <DnxInvisibleCompile Include="DataConfigManager.cs" />
-    <DnxInvisibleCompile Include="ExtensionMethods.cs" />
     <DnxInvisibleCompile Include="NLogger.cs" />
-    <DnxInvisibleCompile Include="Utilities.cs" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>

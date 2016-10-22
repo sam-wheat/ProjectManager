@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ServiceModel;
-using ProjectManager.Model;
+using ProjectManager.Model.Domain;
+using ProjectManager.Model.Presentation;
 
 namespace ProjectManager.Domain
 {
-    public interface IProjectsService
+    public interface IProjectsService : IDisposable
     {
         [OperationContract]
         PresProject[] GetProjectsForUser(int userID, int pageIndex, int pageSize, string sort, string sortDir, Nullable<bool> IsComplete, string projectName, string notes, string tags, out int totalResultCount, int id = 0);

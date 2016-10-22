@@ -9,7 +9,7 @@ using NLog.Config;
 
 namespace ProjectManager.Core
 {
-    public class NLogger : ProjectManager.Domain.ILogger
+    public class NLogger : ILogger
     {
         public Logger Log { get; private set; }
 

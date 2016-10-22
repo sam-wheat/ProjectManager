@@ -3,14 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data.Entity;
-using ProjectManager.Model;
-using ProjectManager.BusinessLogic.Presentation;
+using Microsoft.EntityFrameworkCore;
+using ProjectManager.Model.Domain;
+using ProjectManager.Model.Presentation;
+using ProjectManager.Domain;
 
-namespace ProjectManager.BusinessLogic.Services
+namespace ProjectManager.Services
 {
-    public partial class DataServices
+    public class ProjectsService : BaseService, IProjectsService
     {
+        private IActivitiesService ActivitiesService;
+        private IRemindersService RemindersService;
+        private IDefaultContactsService DefaultContactsService;
+
+        public ProjectsService(MyDbContextOptions options, IActivitiesService actvitiesService, IRemindersService remindersService, IDefaultContactsService defaultContactsService) : base(options)
+        {
+            ActivitiesService = actvitiesService;
+            RemindersService = remindersService;
+            DefaultContactsService = defaultContactsService;
+        }
+
         private bool ValidateProjectHeader(Project project, out string errorMsg)
         {
             errorMsg = "";
@@ -24,9 +36,14 @@ namespace ProjectManager.BusinessLogic.Services
 
         }
 
-        private void SaveProjectActivities(IEnumerable<IPresActivity> activities, Project project, out string errorMsg)
+        private void SaveProjectActivities(IEnumerable<PresActivity> activities, Project project, out string errorMsg)
         {
             errorMsg = "";
+            IEnumerable<Activity> deletes = activities.Where(x => x.IsDeleted && x.ID > 0).Select(x => x.ToActivity());
+
+            if (deletes.Any())
+                ActivitiesService.DeleteActivities(deletes);
+
             foreach (PresActivity presActivity in activities.Where(x => x.IsDeleted || x.IsModified))
             {
                 Activity a = presActivity.ToActivity();
@@ -34,11 +51,11 @@ namespace ProjectManager.BusinessLogic.Services
                 if (presActivity.IsDeleted)
                 {
                     if (a.ID > 0)
-                        deleteActivity(a);
+                        ActivitiesService.DeleteActivity(a);
                 }
                 else
                 {
-                    if (ValidateActivity(a, out errorMsg))
+                    if (ActivitiesService.ValidateActivity(a, out errorMsg))
                     {
                         if (project.Activities == null)
                             project.Activities = new HashSet<Activity>();
@@ -46,7 +63,7 @@ namespace ProjectManager.BusinessLogic.Services
                         a.Project = project;
                         project.Activities.Add(a);
                         a.User = null;
-                        attachActivity(a);
+                        ActivitiesService.AttachActivity(a);
                     }
                     else
                         break;
@@ -54,22 +71,22 @@ namespace ProjectManager.BusinessLogic.Services
             }
         }
 
-        private void SaveProjectReminders(IEnumerable<IPresReminder> reminders, Project project, out string errorMsg)
+        private void SaveProjectReminders(IEnumerable<PresReminder> reminders, Project project, out string errorMsg)
         {
             errorMsg = "";
 
-            foreach (IPresReminder presReminder in reminders.Where(x => x.IsDeleted || x.IsModified))
+            foreach (PresReminder presReminder in reminders.Where(x => x.IsDeleted || x.IsModified))
             {
                 Reminder r = presReminder.ToReminder();
 
                 if (presReminder.IsDeleted)
                 {
                     if (r.ID > 0)
-                        deleteReminder(r);
+                        RemindersService.DeleteReminder(r);
                 }
                 else
                 {
-                    if (ValidateReminder(r, out errorMsg))
+                    if (RemindersService.ValidateReminder(r, out errorMsg))
                     {
                         if (project.Reminders == null)
                             project.Reminders = new HashSet<Reminder>();
@@ -77,7 +94,7 @@ namespace ProjectManager.BusinessLogic.Services
                         r.Project = project;
                         project.Reminders.Add(r);
                         r.User = null;
-                        attachReminder(r);
+                        RemindersService.AttachReminder(r);
                     }
                     else
                         break;
@@ -85,12 +102,12 @@ namespace ProjectManager.BusinessLogic.Services
             }
         }
 
-        private void SaveProjectDefaultContacts(IEnumerable<IPresDefaultContact> contacts, Project project, out string errorMsg)
+        private void SaveProjectDefaultContacts(IEnumerable<PresDefaultContact> contacts, Project project, out string errorMsg)
         {
             errorMsg = "";
             
-            // We select rows where the entity is deleted or is modified but not both.  If an entity is both deleted and modifed
-            // it means the user added and deleted the entity in the same same session without ever saving it to disk. We can therefore
+            // We select rows where the entity is deleted or is modified but not both.  If an entity is both deleted and modified
+            // it means the user added and deleted the entity in the same session without ever saving it to disk. We can therefore
             // just ignore it.
 
             foreach (PresDefaultContact presContact in contacts.Where(x => x.IsDeleted ^ x.IsModified))
@@ -99,7 +116,7 @@ namespace ProjectManager.BusinessLogic.Services
 
                 if (presContact.IsDeleted)
                 {
-                    deleteDefaultContact(c);
+                    DefaultContactsService.DeleteDefaultContact(c);
                 }
                 else
                 {
@@ -107,7 +124,7 @@ namespace ProjectManager.BusinessLogic.Services
                         project.DefaultContacts = new HashSet<DefaultContact>();
                     
                     project.DefaultContacts.Add(c);
-                    attachDefaultContact(c);
+                    DefaultContactsService.AttachDefaultContact(c);
                 }
             }
         }
@@ -125,7 +142,7 @@ namespace ProjectManager.BusinessLogic.Services
             else
                 notes = notes.ToUpper();
 
-            var tmp = (from p in db.Projects.Include("Activities")
+            var tmp = (from p in db.Projects.Include(x => x.Activities)
                        where p.UserID == userID
                        && (IsComplete == null || p.IsComplete == IsComplete.Value)
                        && (id == 0 || p.ID == id)
@@ -261,11 +278,11 @@ namespace ProjectManager.BusinessLogic.Services
                 .Include(x => x.Reminders)
                 .SingleOrDefault(x => x.ID == id);
 
-            deleteActivities(p.Activities);
+            ActivitiesService.DeleteActivities(p.Activities);
 
-            deleteDefaultContacts(p.DefaultContacts);
+            DefaultContactsService.DeleteDefaultContacts(p.DefaultContacts);
 
-            deleteReminders(p.Reminders);
+            RemindersService.DeleteReminders(p.Reminders);
 
             db.Entry(p).State = EntityState.Deleted;       
         }

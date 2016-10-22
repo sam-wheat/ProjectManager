@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ServiceModel;
-using ProjectManager.Model;
+using ProjectManager.Model.Domain;
+using ProjectManager.Model.Presentation;
 
 namespace ProjectManager.Domain
 {
-    public interface IRemindersService
+    public interface IRemindersService : IDisposable
     {
+        [OperationContract]
+        void DeleteReminders(IEnumerable<Reminder> reminders);
+        [OperationContract]
+        void DeleteReminder(Reminder reminder);
+        [OperationContract]
+        void AttachReminder(Reminder reminder);
         [OperationContract]
         Reminder GetReminder(int id);
         [OperationContract]
@@ -24,7 +31,7 @@ namespace ProjectManager.Domain
         [OperationContract]
         bool ValidateReminder(Reminder reminder, out string errorMsg);
         [OperationContract]
-        int DeleteReminder(int reminderID);
+        int DeleteReminderAndSave(int reminderID);
         [OperationContract]
         int ToggleReminderCompletion(int reminderID);
     }
