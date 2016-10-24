@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
+using ProjectManager.Core;
 using ProjectManager.Model.Domain;
 using ProjectManager.Model.Presentation;
 using ProjectManager.Domain;
@@ -16,31 +17,40 @@ namespace ProjectManager.Services
         private IContactsService ContactsService;
         private IProjectsService ProjectsService;
 
-        public UsersService(MyDbContextOptions options, IProjectsService projectsService, IContactsService contactsService) : base(options)
+        public UsersService(Db db, IProjectsService projectsService, IContactsService contactsService) : base(db)
         {
             ContactsService = contactsService;
             ProjectsService = projectsService;
         }
 
-        public User GetUser(string userName, string password)
+        public async Task<IAsyncServiceResult<User>> GetUser(string userName, string password)
         {
-            User user = db.Users.SingleOrDefault(x => x.Name == userName && x.Password == password && x.IsActive);
-            return user;
+            IAsyncServiceResult<User> result = new AsyncResult<User>();
+            result.Data = await db.Users.SingleOrDefaultAsync(x => x.Name == userName && x.Password == password && x.IsActive);
+            return result;
         }
 
-        public int SaveUser(User user, out string errorMsg)
+        public async Task<IAsyncServiceResult> SaveUser(User user)
         {
-            errorMsg = "";
+            IAsyncServiceResult result = new AsyncResult();
+            string errorMsg = "";
 
-            if(! ValidateUser(user, out errorMsg))
-                return 0;
+            if (!ValidateUser(user, out errorMsg))
+            {
+                result.ErrorMessage = errorMsg;
+                return result;
+            }
+
 
             if (user.ID == 0)
                 db.Users.Add(user);
             else
                 db.AttachAsModfied(user);
 
-            return db.SaveChanges();
+            await db.SaveChangesAsync();
+            result.Result = user.ID;
+            result.Success = true;
+            return result;
         }
 
         public bool ValidateUser(User user, out string errorMsg)

@@ -12,7 +12,7 @@ namespace ProjectManager.Services
 {
     public class RemindersService : BaseService, IRemindersService
     {
-        public RemindersService(MyDbContextOptions options) : base(options)
+        public RemindersService(Db db) : base(db)
         {
 
         }

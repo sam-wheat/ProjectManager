@@ -14,7 +14,7 @@ namespace ProjectManager.Services
     {
         
 
-        public ActivitiesService(MyDbContextOptions options) : base(options)
+        public ActivitiesService(Db db) : base(db)
         {
 
         }

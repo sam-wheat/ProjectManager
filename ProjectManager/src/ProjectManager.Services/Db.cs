@@ -11,7 +11,7 @@ using ProjectManager.Model.Domain;
 
 namespace ProjectManager.Services
 {
-    internal class Db : DbContext
+    public class Db : DbContext
     {
         public DbSet<Activity> Activities { get; set; }
         public DbSet<Contact> Contacts { get; set; }
@@ -25,7 +25,7 @@ namespace ProjectManager.Services
 
         }
 
-        internal Db(MyDbContextOptions options) : base(options.Options)
+        public Db(MyDbContextOptions options) : base(options.Options)
         {
 
         }

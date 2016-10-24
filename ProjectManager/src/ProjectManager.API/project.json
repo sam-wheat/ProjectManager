@@ -14,7 +14,14 @@
     "Microsoft.NETCore.App": {
       "version": "1.0.1"
     },
-    "ProjectManager.Core": "1.0.0-*"
+    "ProjectManager.Core": "1.0.0-*",
+    "ProjectManager.Domain": "1.0.0-*",
+    "ProjectManager.Gateway": "1.0.0-*",
+    "ProjectManager.Model": "1.0.0-*",
+    "ProjectManager.Services": "1.0.0-*",
+    "Autofac.Extensions.DependencyInjection": "4.0.0",
+    "Microsoft.Extensions.DependencyInjection": "1.0.0",
+    "Microsoft.AspNetCore.Session": "1.0.0"
   },
 
   "tools": {
@@ -29,8 +36,7 @@
     "netcoreapp1.0": {
       "imports": [
         "dotnet5.6",
-        "portable-net45+win8",
-        "net462"
+        "portable-net45+win8"
       ]
     }
   },

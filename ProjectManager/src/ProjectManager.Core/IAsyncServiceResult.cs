@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 
 namespace ProjectManager.Core
 {
-    public interface IAsyncResult
+    public interface IAsyncServiceResult
     {
         bool Success { get; set; }
         string ErrorMessage { get; set; }
-        int ResultCount { get; set; }
+        int Result { get; set; }
     }
 
-    public interface IAsyncResult<T> : IAsyncResult
+    public interface IAsyncServiceResult<T> : IAsyncServiceResult
     {
         T Data { get; set; }
     }

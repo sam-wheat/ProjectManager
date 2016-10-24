@@ -12,7 +12,7 @@ namespace ProjectManager.Services
 {
     public class DefaultContactsService : BaseService, IDefaultContactsService
     {
-        public DefaultContactsService(MyDbContextOptions options) : base(options)
+        public DefaultContactsService(Db db) : base(db)
         {
 
         }

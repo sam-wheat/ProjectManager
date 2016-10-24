@@ -16,7 +16,7 @@ namespace ProjectManager.Services
         private IRemindersService RemindersService;
         private IDefaultContactsService DefaultContactsService;
 
-        public ProjectsService(MyDbContextOptions options, IActivitiesService actvitiesService, IRemindersService remindersService, IDefaultContactsService defaultContactsService) : base(options)
+        public ProjectsService(Db db, IActivitiesService actvitiesService, IRemindersService remindersService, IDefaultContactsService defaultContactsService) : base(db)
         {
             ActivitiesService = actvitiesService;
             RemindersService = remindersService;

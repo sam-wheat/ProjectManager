@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ProjectManager.Services
 {
-    public class BaseService : IDisposable
+    public abstract class BaseService : IDisposable
     {
         internal Db db;
 
-        public BaseService(MyDbContextOptions options)
+        public BaseService(Db db)
         {
-            db = new Db(options.Options);
+            this.db = db;
         }
 
         private bool disposed;

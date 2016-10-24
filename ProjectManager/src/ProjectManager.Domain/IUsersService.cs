@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ServiceModel;
+using ProjectManager.Core;
 using ProjectManager.Model;
 using ProjectManager.Model.Domain;
 using ProjectManager.Model.Presentation;
@@ -12,9 +13,9 @@ namespace ProjectManager.Domain
     public interface IUsersService : IDisposable
     {
         [OperationContract]
-        User GetUser(string userName, string password);
+        Task<IAsyncServiceResult<User>> GetUser(string userName, string password);
         [OperationContract]
-        int SaveUser(User user, out string errorMsg);
+        Task<IAsyncServiceResult> SaveUser(User user);
         [OperationContract]
         bool ValidateUser(User user, out string errorMsg);
         [OperationContract]

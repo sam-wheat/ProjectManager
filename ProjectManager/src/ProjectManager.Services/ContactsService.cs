@@ -14,7 +14,7 @@ namespace ProjectManager.Services
     {
         private IDefaultContactsService defaultContactsService;
 
-        public ContactsService(MyDbContextOptions options, IDefaultContactsService defaultContactsService) : base(options)
+        public ContactsService(Db db, IDefaultContactsService defaultContactsService) : base(db)
         {
             this.defaultContactsService = defaultContactsService;
         }

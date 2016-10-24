@@ -3,14 +3,30 @@
 
   "dependencies": {
     "NETStandard.Library": "1.6.0",
+    "Microsoft.Extensions.PlatformAbstractions": "1.0.0",
     "NUnit": "3.5.0",
-    "NUnit.Console": "3.5.0",
-    "Microsoft.Extensions.PlatformAbstractions": "1.0.0"
+    "dotnet-test-nunit": "3.4.0-beta-2",
+    "Autofac": "4.1.1",
+    "ProjectManager.Core": "1.0.0-*",
+    "ProjectManager.Domain": "1.0.0-*",
+    "ProjectManager.Gateway": "1.0.0-*",
+    "ProjectManager.Model": "1.0.0-*",
+    "ProjectManager.Services": "1.0.0-*"
   },
 
   "frameworks": {
-    "netstandard1.6": {
-      "imports": "dnxcore50"
+    "netcoreapp1.0": {
+      "imports": [
+        "netcoreapp1.0",
+        "portable-net45+win8"
+      ],
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.1-*",
+          "type": "platform"
+        }
+      }
     }
-  }
+  },
+  "testRunner": "nunit"
 }
