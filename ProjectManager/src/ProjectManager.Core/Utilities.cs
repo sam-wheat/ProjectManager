@@ -51,8 +51,7 @@ namespace ProjectManager.Core
 
             if (VerifyNetworkConnectivity())
             {
-                if (WindowsIdentity.GetCurrent().Name.ToUpper().Contains(WindowsDomainName.ToUpper()))
-                    success = Utilities.IsConnectionStringValid(connectionString);
+                success = Utilities.IsConnectionStringValid(connectionString);
             }
             return success;
         }

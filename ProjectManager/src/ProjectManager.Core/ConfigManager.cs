@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration.Json;
 
 namespace ProjectManager.Core
 {
-    public static class DataConfigManager
+    public static class ConfigManager
     {
         /// <summary>
         /// Root Application directory i.e. C:\Users\SWheat\AppData\CompanyName\ProductName.  Typically you will NOT store stuff here.  Use the AppCurrentConfigDir, AppDataDir or AppLogDir
@@ -25,7 +25,7 @@ namespace ProjectManager.Core
         /// <summary>
         /// Contains artifacts and resources for current app config i.e. DEV or PROD.  Data and Log directories live here.
         /// </summary>
-        public static string AppEnvironmentDir { get { return Path.Combine(UserDataDir, CurrentEnvironmentName); } }
+        public static string AppEnvironmentDir { get { return Path.Combine(UserDataDir, EnvironmentName); } }
 
         /// <summary>
         /// Directory where data files reside for current configuration 
@@ -48,46 +48,37 @@ namespace ProjectManager.Core
         public static string ConnectionStringName { get; private set; }
 
         /// <summary>
-        /// Returns the name of the current environment as as defined in the config file.
+        /// Returns the standardized name of the environment as defined in the ASPNETCORE_ENVIRONMENT variable.
         /// </summary>
-        public static string CurrentEnvironmentName { get; private set; }
+        public static string EnvironmentName { get; private set; }
 
         private static string productDataDir;
         private static string userDataDir;
 
-        static DataConfigManager()
+        static ConfigManager()
         {
-            ConfigurationBuilder builder = new ConfigurationBuilder();
-            builder.SetBasePath(AppCurrentDir);
-            builder.AddJsonFile("appsettings.json");
-            var config = builder.Build();
+            EnvironmentName = GetEnvName();
+            var config = new ConfigurationBuilder()
+            .SetBasePath(AppCurrentDir)
+            .AddJsonFile($"appsettings.{EnvironmentName}.json", optional: false)
+            .Build();
             userDataDir = Environment.GetEnvironmentVariable("LocalAppData");
             productDataDir = config["Config:ProductDataDir"]; // do not use leading "\" in appsettings
             ConnectionStringName = config["Config:CurrentConnectionString"];
-            CurrentEnvironmentName = config["Config:Environment"];
             ConnectionString = (config["ConnectionStrings:" + ConnectionStringName]).Replace("{DataDirectory}", AppDataDir);
-            // Verify Directories.  Need to do this first so we have a dir to write a log to.
-            VerifyApplicationDirectories();
+            var endpoints = ConfigurationBinder.Bind<List<EndPointConfigurationTemplate>>(config.GetSection("EndPointConfigurations"));
         }
 
-        private static void VerifyApplicationDirectories()
+        private static string GetEnvName()
         {
-            if (!Directory.Exists(UserDataDir))
-                Directory.CreateDirectory(UserDataDir);
+            string env = (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development").ToLower();
 
-            if (!Directory.Exists(AppEnvironmentDir))
-                Directory.CreateDirectory(AppEnvironmentDir);
-
-
-            if (!Directory.Exists(AppDataDir))
-                Directory.CreateDirectory(AppDataDir);
-
-
-            if (!Directory.Exists(AppLogDir))
-                Directory.CreateDirectory(AppLogDir);
+            if (env.Contains("dev"))
+                return "Development";
+            else if (env.Contains("prod"))
+                return "Production";
+            else
+                throw new Exception(string.Format("ASPNETCORE_ENVIRONMENT setting not recognized: {0}", env));
         }
-
-
-        
     }
 }

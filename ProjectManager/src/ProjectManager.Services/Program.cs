@@ -10,7 +10,7 @@ namespace ProjectManager.Services
         public static void Main(string[] args)
         {
             // Do not delete this file.  This is a dummy so we can convert the project into a exe to run migrations
-            //string x = ProjectManager.Core.DataConfigManager.ConnectionString;
+            //string x = ProjectManager.Core.ConfigurationManager.ConnectionString;
         }
     }
 }

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Autofac;
 using ProjectManager.Core;
 
+//http://stackoverflow.com/questions/15421430/autofac-delegate-factory-using-func
+
 namespace ProjectManager.Gateway
 {
     public class ServiceClient : IServiceClient
@@ -25,10 +27,12 @@ namespace ProjectManager.Gateway
     public class ServiceCallWrapper<T> : IServiceCallWrapper<T> where T : class, IDisposable
     {
         private ILifetimeScope _container;
+        private EndPointConfigFactory<T> _factory;
 
         internal ServiceCallWrapper(ILifetimeScope container)
         {
             _container = container;
+            _factory = container.Resolve<EndPointConfigFactory<T>>();
         }
 
         public void Try(Action<T> method)
@@ -55,6 +59,7 @@ namespace ProjectManager.Gateway
         {
             using (var scope = _container.BeginLifetimeScope())
             {
+                
                 T client = scope.Resolve<T>();
                 await method(client);
             }

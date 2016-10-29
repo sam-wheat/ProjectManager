@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 
 namespace ProjectManager.Core
 {
-    public class NamedConnectionString : INamedConnectionString
+    public enum EndPointType
     {
-        public string ConnectionString { get; set; }
+        InProcess,
+        REST,
+        WCF
     }
 }

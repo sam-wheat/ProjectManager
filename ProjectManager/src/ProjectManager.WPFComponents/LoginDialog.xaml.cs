@@ -87,8 +87,10 @@ namespace ProjectManager.WPFComponents
                 Close();
             else
             {
+                // plug
+                //AsyncResult<User> userResult = await serviceClient.OfType<IUsersService>().TryAsync(x => x.GetUser(UserName, Password));
                 User user = null;
-                serviceClient.OfType<IUsersService>().Try(x => user = x.GetUser(UserName, Password));
+                // end plug
 
                 if (user == null)
                     ErrorMsgVisibility = Visibility.Visible;

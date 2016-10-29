@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using ProjectManager.Domain;
 
 namespace ProjectManager.Services
 {
     public abstract class BaseService : IDisposable
     {
         internal Db db;
+        public abstract APIName APIName { get; }
 
         public BaseService(Db db)
         {

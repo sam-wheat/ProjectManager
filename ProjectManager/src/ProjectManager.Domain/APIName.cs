@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjectManager.Gateway
+namespace ProjectManager.Domain
 {
-    public class Class1
+    public enum APIName
     {
-        public Class1()
-        {
-        }
+        ProjectManager
     }
 }

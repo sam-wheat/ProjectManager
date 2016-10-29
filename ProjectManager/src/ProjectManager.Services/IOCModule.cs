@@ -21,6 +21,7 @@ namespace ProjectManager.Services
             builder.RegisterType<ProjectsService>().As<IProjectsService>();
             builder.RegisterType<RemindersService>().As<IRemindersService>();
             builder.RegisterType<UsersService>().As<IUsersService>();
+            builder.RegisterType<UsersService>().As<IUsersService>();
             builder.RegisterType<DatabaseUtilitiesServicecs>().As<IDatabaseUtilitiesService>();
         }
     }

@@ -21,6 +21,7 @@ namespace ProjectManager.Tests
 
         public BaseTest()
         {
+            // https://weblog.west-wind.com/posts/2016/may/23/strongly-typed-configuration-settings-in-aspnet-core
             BuildContainer();
             CreateServiceClient();
             InitializeDatabase();
@@ -33,14 +34,13 @@ namespace ProjectManager.Tests
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());
-            
             container = builder.Build();
         }
 
         protected void CreateServiceClient()
         {
-            INamedConnectionString conn = container.Resolve<INamedConnectionString>();
-            conn.ConnectionString = ProjectManager.Core.DataConfigManager.ConnectionString;
+            IEndPointConfiguration conn = container.Resolve<IEndPointConfiguration>();
+            conn.ConnectionString = ProjectManager.Core.ConfigManager.ConnectionString;
             ServiceClient = container.Resolve<IServiceClient>();
         }
 

@@ -12,6 +12,8 @@ namespace ProjectManager.Services
 {
     public class ProjectsService : BaseService, IProjectsService
     {
+        public override APIName APIName { get { return APIName.ProjectManager; } }
+
         private IActivitiesService ActivitiesService;
         private IRemindersService RemindersService;
         private IDefaultContactsService DefaultContactsService;

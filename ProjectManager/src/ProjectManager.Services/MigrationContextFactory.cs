@@ -14,7 +14,7 @@ namespace ProjectManager.Services
         public Db Create(DbContextFactoryOptions options)
         {
             //string connectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=ProjectManager;Integrated Security=True;MultipleActiveResultSets=True";
-            string connectionString = DataConfigManager.ConnectionString;
+            string connectionString = ConfigManager.ConnectionString;
                 
             DbContextOptionsBuilder dbOptions = new DbContextOptionsBuilder();
             dbOptions.UseSqlServer(connectionString);

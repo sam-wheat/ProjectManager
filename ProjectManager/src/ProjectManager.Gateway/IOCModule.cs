@@ -12,6 +12,7 @@ namespace ProjectManager.Gateway
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
+            builder.RegisterGeneric(typeof(EndPointConfigFactory<>));
             builder.RegisterType<ServiceClient>().As<IServiceClient>();
         }
     }

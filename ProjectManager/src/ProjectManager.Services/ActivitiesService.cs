@@ -12,7 +12,7 @@ namespace ProjectManager.Services
 {
     public class ActivitiesService : BaseService, IActivitiesService
     {
-        
+        public override APIName APIName { get { return APIName.ProjectManager; } }
 
         public ActivitiesService(Db db) : base(db)
         {

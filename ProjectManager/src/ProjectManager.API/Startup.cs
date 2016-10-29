@@ -20,6 +20,8 @@ namespace ProjectManager.API
 {
     public class Startup
     {
+        public IConfigurationRoot Configuration { get; }
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -29,8 +31,6 @@ namespace ProjectManager.API
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
-
-        public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -56,10 +56,11 @@ namespace ProjectManager.API
             var builder = new ContainerBuilder();
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());
+            builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.Populate(services);
             var container = builder.Build();
-            INamedConnectionString conn = container.Resolve<INamedConnectionString>();
-            conn.ConnectionString = DataConfigManager.ConnectionString;
+            IEndPointConfiguration conn = container.Resolve<IEndPointConfiguration>();
+            conn.ConnectionString = ConfigManager.ConnectionString;
 
             // Make sure the database exists
             container.Resolve<IDatabaseUtilitiesService>().CreateOrUpdateDatabase();
@@ -72,7 +73,8 @@ namespace ProjectManager.API
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
+            app.UseSession();
+            app.UseCors(x => x.WithOrigins(new string[] { "http://localhost:51513" }));
             app.UseMvc();
         }
     }

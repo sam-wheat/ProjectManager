@@ -14,6 +14,8 @@ namespace ProjectManager.Services
 {
     public class UsersService : BaseService, IUsersService
     {
+        public override APIName APIName { get { return APIName.ProjectManager; } }
+
         private IContactsService ContactsService;
         private IProjectsService ProjectsService;
 
@@ -27,6 +29,7 @@ namespace ProjectManager.Services
         {
             IAsyncServiceResult<User> result = new AsyncResult<User>();
             result.Data = await db.Users.SingleOrDefaultAsync(x => x.Name == userName && x.Password == password && x.IsActive);
+            result.Success = true;
             return result;
         }
 

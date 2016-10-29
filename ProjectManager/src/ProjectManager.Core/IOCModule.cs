@@ -12,7 +12,7 @@ namespace ProjectManager.Core
         {
             base.Load(builder);
             builder.RegisterType<NLogger>().As<ILogger>();
-            builder.RegisterType<NamedConnectionString>().As<INamedConnectionString>().SingleInstance();
+            builder.RegisterType<InProcessEndPoint>().As<IEndPointConfiguration>().SingleInstance();
         }
     }
 }

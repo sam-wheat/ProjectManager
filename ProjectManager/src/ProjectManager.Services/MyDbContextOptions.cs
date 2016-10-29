@@ -12,7 +12,7 @@ namespace ProjectManager.Services
         public string connnectionString { get; private set; }
         public DbContextOptions Options { get; private set; }
 
-        public MyDbContextOptions(INamedConnectionString conn)
+        public MyDbContextOptions(IEndPointConfiguration conn)
         {
             connnectionString = conn.ConnectionString;
             var builder = new DbContextOptionsBuilder();

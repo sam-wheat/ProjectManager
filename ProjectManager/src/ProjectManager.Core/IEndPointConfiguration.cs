@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 
 namespace ProjectManager.Core
 {
-    public interface INamedConnectionString
+    public interface IEndPointConfiguration
     {
+        string API_Name { get; set; }
         string ConnectionString { get; set; }
+        Dictionary<string, string> Parameters { get; set; }
     }
 }
