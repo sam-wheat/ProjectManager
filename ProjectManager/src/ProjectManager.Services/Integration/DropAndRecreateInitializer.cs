@@ -8,10 +8,10 @@ namespace ProjectManager.Services.Integration
 {
     public class DropAndRecreateInitializer
     {
-        private MyDbContextOptions _options;
+        private SQLServerDbContextOptions _options;
         private Db _db;
 
-        public DropAndRecreateInitializer(MyDbContextOptions options)
+        public DropAndRecreateInitializer(SQLServerDbContextOptions options)
         {
             _options = options;
             _db = new Db(_options);

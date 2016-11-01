@@ -35,6 +35,7 @@ namespace ProjectManager.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            // http://asp.net-hacker.rocks/2016/03/21/configure-aspnetcore.html
             // Add framework services.
             services.AddMemoryCache();
             services.AddSession();
@@ -51,6 +52,8 @@ namespace ProjectManager.API
                 options.OutputFormatters.RemoveType<JsonOutputFormatter>();
                 options.OutputFormatters.Insert(0, formatter);
             });
+            services.Configure<List<EndPointConfigurationTemplate>>(Configuration.GetSection("EndPointConfigurations"));
+            List<EndPointConfigurationTemplate> templates = ConfigurationBinder.Bind<List<EndPointConfigurationTemplate>>(Configuration.GetSection("EndPointConfigurations"));
 
             // Autofac
             var builder = new ContainerBuilder();
@@ -58,6 +61,7 @@ namespace ProjectManager.API
             builder.RegisterModule(new ProjectManager.Services.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.Populate(services);
+            Gateway.EndPointRegistrar.Register(templates, builder);
             var container = builder.Build();
             IEndPointConfiguration conn = container.Resolve<IEndPointConfiguration>();
             conn.ConnectionString = ConfigManager.ConnectionString;

@@ -27,12 +27,10 @@ namespace ProjectManager.Gateway
     public class ServiceCallWrapper<T> : IServiceCallWrapper<T> where T : class, IDisposable
     {
         private ILifetimeScope _container;
-        private EndPointConfigFactory<T> _factory;
 
         internal ServiceCallWrapper(ILifetimeScope container)
         {
             _container = container;
-            _factory = container.Resolve<EndPointConfigFactory<T>>();
         }
 
         public void Try(Action<T> method)

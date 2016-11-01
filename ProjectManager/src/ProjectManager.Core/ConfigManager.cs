@@ -58,7 +58,7 @@ namespace ProjectManager.Core
         static ConfigManager()
         {
             EnvironmentName = GetEnvName();
-            var config = new ConfigurationBuilder()
+            IConfigurationRoot config = new ConfigurationBuilder()
             .SetBasePath(AppCurrentDir)
             .AddJsonFile($"appsettings.{EnvironmentName}.json", optional: false)
             .Build();

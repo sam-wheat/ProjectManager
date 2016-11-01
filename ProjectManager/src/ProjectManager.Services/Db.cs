@@ -25,13 +25,14 @@ namespace ProjectManager.Services
 
         }
 
-        public Db(MyDbContextOptions options) : base(options.Options)
+        public Db(SQLServerDbContextOptions options) : base(options.Options)
         {
-
+            
         }
 
         internal Db(DbContextOptions options) : base(options)
         {
+            
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

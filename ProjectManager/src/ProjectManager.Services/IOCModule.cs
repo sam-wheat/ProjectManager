@@ -13,14 +13,13 @@ namespace ProjectManager.Services
         {
             base.Load(builder);
             builder.RegisterType<Integration.DropAndRecreateInitializer>();
-            builder.RegisterType<MyDbContextOptions>();
+            builder.RegisterType<SQLServerDbContextOptions>();
             builder.RegisterType<Db>().InstancePerLifetimeScope();  // One instance for all services that request a Db within a lifetimeScope
             builder.RegisterType<ActivitiesService>().As<IActivitiesService>();
             builder.RegisterType<ContactsService>().As<IContactsService>();
             builder.RegisterType<DefaultContactsService>().As<IDefaultContactsService>();
             builder.RegisterType<ProjectsService>().As<IProjectsService>();
             builder.RegisterType<RemindersService>().As<IRemindersService>();
-            builder.RegisterType<UsersService>().As<IUsersService>();
             builder.RegisterType<UsersService>().As<IUsersService>();
             builder.RegisterType<DatabaseUtilitiesServicecs>().As<IDatabaseUtilitiesService>();
         }

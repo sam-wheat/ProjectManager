@@ -7,17 +7,16 @@ using ProjectManager.Core;
 
 namespace ProjectManager.Services
 {
-    public class MyDbContextOptions
+    public class SQLServerDbContextOptions
     {
-        public string connnectionString { get; private set; }
         public DbContextOptions Options { get; private set; }
 
-        public MyDbContextOptions(IEndPointConfiguration conn)
+        public SQLServerDbContextOptions(InProcessEndPoint endpoint)
         {
-            connnectionString = conn.ConnectionString;
             var builder = new DbContextOptionsBuilder();
-            builder.UseSqlServer(connnectionString);
+            builder.UseSqlServer(endpoint.ConnectionString);
             Options = builder.Options;
         }
     }
 }
+
