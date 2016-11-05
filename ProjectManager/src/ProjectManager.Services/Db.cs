@@ -22,7 +22,8 @@ namespace ProjectManager.Services
 
         internal Db() // required for migrations
         {
-
+            // read the help
+            //ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         public Db(SQLServerDbContextOptions options) : base(options.Options)

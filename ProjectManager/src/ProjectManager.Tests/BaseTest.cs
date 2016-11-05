@@ -18,10 +18,12 @@ namespace ProjectManager.Tests
     {
         protected IContainer container { get; private set; }
         protected IServiceClient ServiceClient { get; private set; }
+        protected IConfiguration Configuration { get; set; }
 
         public BaseTest()
         {
             // https://weblog.west-wind.com/posts/2016/may/23/strongly-typed-configuration-settings-in-aspnet-core
+            Configuration = ConfigManager.GetConfigurationRoot();
             BuildContainer();
             CreateServiceClient();
             InitializeDatabase();
@@ -30,7 +32,9 @@ namespace ProjectManager.Tests
 
         protected void BuildContainer()
         {
+            List<EndPointConfigurationTemplate> templates = ConfigurationBinder.Bind<List<EndPointConfigurationTemplate>>(Configuration.GetSection("EndPointConfigurations"));
             ContainerBuilder builder = new ContainerBuilder();
+            Gateway.EndPointRegistrar.Register(templates, builder, typeof(APIName));
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());

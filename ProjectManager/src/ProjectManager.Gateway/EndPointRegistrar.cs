@@ -14,7 +14,7 @@ namespace ProjectManager.Gateway
 {
     public static class EndPointRegistrar
     {
-        public static void Register(List<EndPointConfigurationTemplate> templates, ContainerBuilder builder)
+        public static void Register(List<EndPointConfigurationTemplate> templates, ContainerBuilder builder, Type apiNames)
         {
             if (templates == null)
                 return;
@@ -25,13 +25,14 @@ namespace ProjectManager.Gateway
                 throw new Exception($"Duplicate EndPointConfiguration found.  API_Name: {dupes.First().Key.API_Name}, EndPointType: {dupes.First().Key.EndPointType}.");
 
             foreach (EndPointConfigurationTemplate template in templates)
-                RegisterEndPoint(template, builder);
+                RegisterEndPoint(template, builder, apiNames);
                 
         }
 
-        private static void RegisterEndPoint(EndPointConfigurationTemplate template, ContainerBuilder builder)
+        private static void RegisterEndPoint(EndPointConfigurationTemplate template, ContainerBuilder builder, Type apiNames)
         {
             IEndPointConfiguration config;
+            var apiEnumName = Enum.Parse(apiNames, template.API_Name);
 
             switch (template.EndPointType)
             {

@@ -69,6 +69,16 @@ namespace ProjectManager.Core
             var endpoints = ConfigurationBinder.Bind<List<EndPointConfigurationTemplate>>(config.GetSection("EndPointConfigurations"));
         }
 
+        public static IConfigurationRoot GetConfigurationRoot()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
+            return builder.Build();
+        }
+
         private static string GetEnvName()
         {
             string env = (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development").ToLower();
