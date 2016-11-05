@@ -12,7 +12,6 @@ namespace ProjectManager.Core
         {
             base.Load(builder);
             builder.RegisterType<NLogger>().As<ILogger>();
-            builder.RegisterType<InProcessEndPoint>().As<IEndPointConfiguration>().SingleInstance();
         }
     }
 }

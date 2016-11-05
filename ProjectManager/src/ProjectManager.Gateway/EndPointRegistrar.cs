@@ -19,6 +19,12 @@ namespace ProjectManager.Gateway
             if (templates == null)
                 return;
 
+            if (builder == null)
+                throw new ArgumentNullException("builder");
+
+            if (apiNames == null)
+                throw new ArgumentNullException("apiNames");
+
             var dupes = templates.GroupBy(x => new { x.API_Name, x.EndPointType }).Where(x => x.Count() > 1);
 
             if (dupes.Any())
@@ -32,24 +38,24 @@ namespace ProjectManager.Gateway
         private static void RegisterEndPoint(EndPointConfigurationTemplate template, ContainerBuilder builder, Type apiNames)
         {
             IEndPointConfiguration config;
-            var apiEnumName = Enum.Parse(apiNames, template.API_Name);
+            object apiEnumName = Enum.Parse(apiNames, template.API_Name);
 
             switch (template.EndPointType)
             {
                 case EndPointType.InProcess:
                     config = new InProcessEndPoint();
-                    builder.RegisterInstance(config).As<InProcessEndPoint>().SingleInstance();
+                    builder.RegisterInstance(config).Keyed<InProcessEndPoint>(apiEnumName).SingleInstance();
                     break;
                 case EndPointType.REST:
                     config = new RESTEndPoint();
-                    builder.RegisterInstance(config).As<RESTEndPoint>().SingleInstance();
+                    builder.RegisterInstance(config).Keyed<RESTEndPoint>(apiEnumName).SingleInstance();
                     break;
                 case EndPointType.WCF:
                     config = new WCFEndPoint();
                     builder.RegisterInstance(config).As<WCFEndPoint>().SingleInstance();
                     break;
                 default:
-                    throw new Exception("");
+                    throw new Exception("EndPoint type not recognised.");
             }
 
             config.API_Name = template.API_Name;

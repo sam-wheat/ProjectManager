@@ -44,8 +44,6 @@ namespace ProjectManager.Tests
 
         protected void CreateServiceClient()
         {
-            IEndPointConfiguration conn = container.Resolve<IEndPointConfiguration>();
-            conn.ConnectionString = ProjectManager.Core.ConfigManager.ConnectionString;
             ServiceClient = container.Resolve<IServiceClient>();
         }
 

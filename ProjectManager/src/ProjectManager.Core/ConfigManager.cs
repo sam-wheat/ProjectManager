@@ -50,18 +50,24 @@ namespace ProjectManager.Core
         /// <summary>
         /// Returns the standardized name of the environment as defined in the ASPNETCORE_ENVIRONMENT variable.
         /// </summary>
-        public static string EnvironmentName { get; private set; }
+        public static string EnvironmentName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(environmentName))
+                    environmentName = GetEnvName();
 
+                return environmentName;
+            }
+                
+        }
+        private static string environmentName;
         private static string productDataDir;
         private static string userDataDir;
 
         static ConfigManager()
         {
-            EnvironmentName = GetEnvName();
-            IConfigurationRoot config = new ConfigurationBuilder()
-            .SetBasePath(AppCurrentDir)
-            .AddJsonFile($"appsettings.{EnvironmentName}.json", optional: false)
-            .Build();
+            IConfigurationRoot config = GetConfigurationRoot();
             userDataDir = Environment.GetEnvironmentVariable("LocalAppData");
             productDataDir = config["Config:ProductDataDir"]; // do not use leading "\" in appsettings
             ConnectionStringName = config["Config:CurrentConnectionString"];
@@ -72,9 +78,9 @@ namespace ProjectManager.Core
         public static IConfigurationRoot GetConfigurationRoot()
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
+                .SetBasePath(AppCurrentDir)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile($"appsettings.{EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             return builder.Build();
         }
