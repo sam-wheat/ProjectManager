@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using ProjectManager.Model.Domain;
-
+using ProjectManager.Core;
 
 
 namespace ProjectManager.Services
@@ -26,7 +26,7 @@ namespace ProjectManager.Services
             //ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
-        public Db(SQLServerDbContextOptions options) : base(options.Options)
+        public Db(IDbContextOptions options) : base(options.Options)
         {
             
         }

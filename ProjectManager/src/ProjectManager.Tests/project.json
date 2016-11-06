@@ -3,8 +3,6 @@
 
   "dependencies": {
     "NUnit": "3.5.0",
-    "dotnet-test-nunit": "3.4.0-beta-2",
-    "Autofac": "4.1.1",
     "ProjectManager.Core": "1.0.0-*",
     "ProjectManager.Domain": "1.0.0-*",
     "ProjectManager.Gateway": "1.0.0-*",
@@ -12,7 +10,10 @@
     "ProjectManager.Services": "1.0.0-*",
     "Microsoft.Extensions.PlatformAbstractions": "1.1.0-preview1-final",
     "Microsoft.NETCore.App": "1.1.0-preview1-001100-00",
-    "NETStandard.Library": "1.6.1-preview1-24530-04"
+    "NETStandard.Library": "1.6.1-preview1-24530-04",
+    "Autofac": "4.2.0",
+    "dotnet-test-nunit": "3.4.0-beta-3",
+    "ProjectManager.Services.Twitter": "1.0.0-*"
   },
   "runtimes": {
     "win10-x64": {}

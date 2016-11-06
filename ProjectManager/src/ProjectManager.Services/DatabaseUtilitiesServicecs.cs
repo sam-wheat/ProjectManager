@@ -10,7 +10,6 @@ namespace ProjectManager.Services
 {
     public class DatabaseUtilitiesServicecs : BaseService, IDatabaseUtilitiesService
     {
-        public override APIName APIName { get { return APIName.ProjectManager; } }
 
         public DatabaseUtilitiesServicecs(Db db) : base(db)
         {

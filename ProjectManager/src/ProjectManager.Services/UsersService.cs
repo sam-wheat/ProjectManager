@@ -14,8 +14,6 @@ namespace ProjectManager.Services
 {
     public class UsersService : BaseService, IUsersService
     {
-        public override APIName APIName { get { return APIName.ProjectManager; } }
-
         private IContactsService ContactsService;
         private IProjectsService ProjectsService;
 

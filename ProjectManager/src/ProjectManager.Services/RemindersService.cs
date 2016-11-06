@@ -12,8 +12,6 @@ namespace ProjectManager.Services
 {
     public class RemindersService : BaseService, IRemindersService
     {
-        public override APIName APIName { get { return APIName.ProjectManager; } }
-
         public RemindersService(Db db) : base(db)
         {
 

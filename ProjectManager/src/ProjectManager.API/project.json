@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "Microsoft.Extensions.Configuration.Json": "1.1.0-preview1-final",
-    "Autofac": "4.1.1",
     "ProjectManager.Core": "1.0.0-*",
     "ProjectManager.Domain": "1.0.0-*",
     "ProjectManager.Gateway": "1.0.0-*",
@@ -20,7 +19,8 @@
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0-preview1-final",
     "Microsoft.NETCore.App": "1.1.0-preview1-001100-00",
     "Microsoft.AspNetCore.Mvc": "1.1.0-preview1-final",
-    "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0-preview1-final"
+    "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0-preview1-final",
+    "Autofac": "4.2.0"
   },
 
   "tools": {

@@ -5,13 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ProjectManager.Core;
 
-namespace ProjectManager.Services
+namespace ProjectManager.Core
 {
-    public class SQLServerDbContextOptions
+    public abstract class ServiceDbContextOptions : IDbContextOptions
     {
         public DbContextOptions Options { get; private set; }
 
-        public SQLServerDbContextOptions(InProcessEndPoint endpoint)
+        public ServiceDbContextOptions(InProcessEndPoint endpoint)
+        {
+            Configure(endpoint);
+        }
+
+        public virtual void Configure(InProcessEndPoint endpoint)
         {
             var builder = new DbContextOptionsBuilder();
             builder.UseSqlServer(endpoint.ConnectionString);

@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjectManager.Domain
+namespace ProjectManager.Model.Twitter
 {
-    public enum APIName
+    public class Tweet
     {
-        ProjectManager,
-        Twitter
+        public string Message { get; set; }
     }
 }

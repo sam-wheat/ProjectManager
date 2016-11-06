@@ -12,7 +12,6 @@ namespace ProjectManager.Services
 {
     public class DefaultContactsService : BaseService, IDefaultContactsService
     {
-        public override APIName APIName { get { return APIName.ProjectManager; } }
 
         public DefaultContactsService(Db db) : base(db)
         {

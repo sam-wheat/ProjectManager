@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
-namespace ProjectManager.Services
+namespace ProjectManager.Services.Twitter
 {
-    public abstract class BaseService : IDisposable
+    public class BaseService : IDisposable
     {
-        internal Db db;
-
-        public BaseService(Db db)
+        public BaseService()
         {
-            this.db = db;
         }
 
         private bool disposed;
@@ -24,7 +20,6 @@ namespace ProjectManager.Services
                 if (disposing)
                 {
                     disposed = true;
-                    db.Dispose();
                 }
             }
         }
