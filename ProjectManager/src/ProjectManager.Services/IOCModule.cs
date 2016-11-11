@@ -28,8 +28,9 @@ namespace ProjectManager.Services
             builder.RegisterType<DefaultContactsService>().As<IDefaultContactsService>();
             builder.RegisterType<ProjectsService>().As<IProjectsService>();
             builder.RegisterType<RemindersService>().As<IRemindersService>();
-            builder.RegisterType<UsersService>().As<IUsersService>();
+            builder.RegisterType<UsersService>().Keyed<IUsersService>(EndPointType.InProcess);
             builder.RegisterType<DatabaseUtilitiesServicecs>().As<IDatabaseUtilitiesService>();
         }
     }
 }
+    

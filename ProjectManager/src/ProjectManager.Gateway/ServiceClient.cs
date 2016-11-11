@@ -11,16 +11,16 @@ namespace ProjectManager.Gateway
 {
     public class ServiceClient : IServiceClient
     {
-        private ILifetimeScope _container;
+        private ILifetimeScope container;
 
         public ServiceClient(ILifetimeScope container)
         {
-            _container = container;
+            this.container = container;
         }
 
         public IServiceCallWrapper<T> OfType<T>() where T : class, IDisposable
         {
-            return new ServiceCallWrapper<T>(_container);
+            return new ServiceCallWrapper<T>(container);
         }
     }
 
@@ -35,11 +35,10 @@ namespace ProjectManager.Gateway
 
         public void Try(Action<T> method)
         {
-            // consider try/catch/log/throw here
 
             using (var scope = _container.BeginLifetimeScope())
             {
-                T client = scope.Resolve<T>();
+                T client = ResolveClient(scope);
                 method(client);
             }
         }
@@ -48,7 +47,7 @@ namespace ProjectManager.Gateway
         {
             using (var scope = _container.BeginLifetimeScope())
             {
-                T client = scope.Resolve<T>();
+                T client = ResolveClient(scope);
                 return method(client);
             }
         }
@@ -57,8 +56,7 @@ namespace ProjectManager.Gateway
         {
             using (var scope = _container.BeginLifetimeScope())
             {
-                
-                T client = scope.Resolve<T>();
+                T client = ResolveClient(scope);
                 await method(client);
             }
         }
@@ -67,9 +65,21 @@ namespace ProjectManager.Gateway
         {
             using (var scope = _container.BeginLifetimeScope())
             {
-                T client = scope.Resolve<T>();
+                T client = ResolveClient(scope);
                 return await method(client);
             }
+        }
+
+        protected virtual T ResolveClient(ILifetimeScope container)
+        {
+            T client = default(T);
+
+            if (false)                       //if (Utilities.VerifyNetworkConnectivity())
+                client = container.ResolveKeyed<T>(EndPointType.InProcess);
+            else
+                client = container.ResolveKeyed<T>(EndPointType.REST);
+
+            return client;
         }
     }
 }

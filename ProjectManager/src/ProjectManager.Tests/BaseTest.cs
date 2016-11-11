@@ -9,6 +9,8 @@ using ProjectManager.Core;
 using ProjectManager.Domain;
 using ProjectManager.Services;
 using ProjectManager.Services.Integration;
+using ProjectManager.Services.REST;
+
 
 namespace ProjectManager.Tests
 {
@@ -38,6 +40,7 @@ namespace ProjectManager.Tests
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());
+            builder.RegisterModule(new ProjectManager.Services.REST.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.Twitter.IOCModule());
             builder.RegisterModule(new Tests.IOCModule());
             container = builder.Build();

@@ -32,30 +32,29 @@ namespace ProjectManager.Gateway
 
             foreach (EndPointConfigurationTemplate template in templates)
                 RegisterEndPoint(template, builder, apiNames);
-                
         }
 
         private static void RegisterEndPoint(EndPointConfigurationTemplate template, ContainerBuilder builder, Type apiNames)
         {
             IEndPointConfiguration config;
-            object apiEnumName = Enum.Parse(apiNames, template.API_Name);
+            object apiName = Enum.Parse(apiNames, template.API_Name);
 
             switch (template.EndPointType)
             {
                 case EndPointType.InProcess:
                     config = new InProcessEndPoint();
-                    builder.RegisterInstance(config).Keyed<InProcessEndPoint>(apiEnumName).SingleInstance();
+                    builder.RegisterInstance(config).Keyed<InProcessEndPoint>(apiName).SingleInstance();
                     break;
                 case EndPointType.REST:
                     config = new RESTEndPoint();
-                    builder.RegisterInstance(config).Keyed<RESTEndPoint>(apiEnumName).SingleInstance();
+                    builder.RegisterInstance(config).Keyed<RESTEndPoint>(apiName).SingleInstance();
                     break;
                 case EndPointType.WCF:
                     config = new WCFEndPoint();
                     builder.RegisterInstance(config).As<WCFEndPoint>().SingleInstance();
                     break;
                 default:
-                    throw new Exception("EndPoint type not recognised.");
+                    throw new Exception("EndPoint type not recognized.");
             }
 
             config.API_Name = template.API_Name;

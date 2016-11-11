@@ -7,7 +7,6 @@
     "Microsoft.Extensions.Configuration.Json": "1.1.0-preview1-final",
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0-preview1-final",
     "Microsoft.Extensions.PlatformAbstractions": "1.1.0-preview1-final",
-    "NETStandard.Library": "1.6.1-preview1-24530-04",
     "System.Data.SqlClient": "4.3.0-preview1-24530-04",
     "System.Net.NetworkInformation": "4.3.0-preview1-24530-04",
     "System.Security.Principal": "4.3.0-preview1-24530-04",
@@ -15,7 +14,8 @@
     "Autofac": "4.2.0",
     "NLog": "5.0.0-beta03",
     "Microsoft.EntityFrameworkCore": "1.1.0-preview1-final",
-    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0-preview1-final"
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0-preview1-final",
+    "NETStandard.Library": "1.6.1-preview1-24530-04"
   },
   "frameworks": {
     "netstandard1.6": {
