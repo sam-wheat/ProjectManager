@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ProjectManager.Model.Twitter;
+using TwitterAPI.Model;
 
-namespace ProjectManager.Domain.Twitter
+namespace TwitterAPI.Domain
 {
     public interface ITwitter : IDisposable
     {

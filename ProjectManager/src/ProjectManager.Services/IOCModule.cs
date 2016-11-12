@@ -30,6 +30,7 @@ namespace ProjectManager.Services
             builder.RegisterType<RemindersService>().As<IRemindersService>();
             builder.RegisterType<UsersService>().Keyed<IUsersService>(EndPointType.InProcess);
             builder.RegisterType<DatabaseUtilitiesServicecs>().As<IDatabaseUtilitiesService>();
+            
         }
     }
 }

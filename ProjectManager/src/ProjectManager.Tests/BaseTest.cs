@@ -10,7 +10,7 @@ using ProjectManager.Domain;
 using ProjectManager.Services;
 using ProjectManager.Services.Integration;
 using ProjectManager.Services.REST;
-
+using ProjectManager.Gateway;
 
 namespace ProjectManager.Tests
 {
@@ -34,14 +34,17 @@ namespace ProjectManager.Tests
 
         protected void BuildContainer()
         {
+            EndPointTypeResolver epr = new EndPointTypeResolver();
+            epr.Register(typeof(IUsersService), new ProjectManagerAPI());
+            
             List<EndPointConfigurationTemplate> templates = ConfigurationBinder.Bind<List<EndPointConfigurationTemplate>>(Configuration.GetSection("EndPointConfigurations"));
             ContainerBuilder builder = new ContainerBuilder();
+            builder.RegisterInstance(epr).As<IEndPointTypeResolver>().SingleInstance();
             Gateway.EndPointRegistrar.Register(templates, builder, typeof(APIName));
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.REST.IOCModule());
-            builder.RegisterModule(new ProjectManager.Services.Twitter.IOCModule());
             builder.RegisterModule(new Tests.IOCModule());
             container = builder.Build();
         }

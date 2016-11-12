@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ProjectManager.Services.Twitter")]
+[assembly: AssemblyProduct("Twitter.Services")]
 [assembly: AssemblyTrademark("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -16,4 +16,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("42635cf9-fb6d-400a-bb86-d7f8bb6d470f")]
+[assembly: Guid("456cdac5-11fb-48e8-8fde-22fee52e703b")]

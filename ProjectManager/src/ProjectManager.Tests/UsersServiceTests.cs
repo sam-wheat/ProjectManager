@@ -11,6 +11,7 @@ using ProjectManager.Model.Domain;
 
 namespace ProjectManager.Tests
 {
+
     [TestFixture]
     public class UsersServiceTests : BaseTest
     {

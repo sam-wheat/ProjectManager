@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ProjectManager.Model.Twitter;
-using ProjectManager.Domain.Twitter;
+using TwitterAPI.Model;
+using TwitterAPI.Domain;
 
-namespace ProjectManager.Services.Twitter
+namespace TwitterAPI.Services
 {
     public class TweetService : BaseService, ITwitter
     {

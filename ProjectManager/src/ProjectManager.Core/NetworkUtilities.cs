@@ -7,9 +7,9 @@ using System.Security.Principal;
 
 namespace ProjectManager.Core
 {
-    public class Utilities
+    public class NetworkUtilities : INetworkUtilities
     {
-        public static bool IsConnectionStringValid(string connectionString)
+        public bool IsConnectionStringValid(string connectionString)
         {
             bool result = true;
 
@@ -32,7 +32,7 @@ namespace ProjectManager.Core
         /// Verifies a network interface exists. 
         /// </summary>
         /// <returns></returns>
-        public static bool VerifyNetworkConnectivity()
+        public bool IsNetworkAvailable()
         {
             bool success = NetworkInterface.GetIsNetworkAvailable();
             return success;
@@ -45,26 +45,15 @@ namespace ProjectManager.Core
         /// and that valid connection strings exist and that the DB server is up and running and accepting connections.
         /// </summary>
         /// <returns></returns>
-        public static bool VerifyDBServerConnectivity(string WindowsDomainName, string connectionString)
+        public bool VerifyDBServerConnectivity(string WindowsDomainName, string connectionString)
         {
             bool success = false;
 
-            if (VerifyNetworkConnectivity())
+            if (IsNetworkAvailable())
             {
-                success = Utilities.IsConnectionStringValid(connectionString);
+                success = IsConnectionStringValid(connectionString);
             }
             return success;
-        }
-
-        /// <summary>
-        /// Escapes embeded quotes in strings for javascript
-        /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
-        public static string UnQuote(string s)
-        {
-            var t = s.Replace("\"", "&quot;").Replace("'", "\\'");
-            return t;
         }
     }
 }

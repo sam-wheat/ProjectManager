@@ -13,6 +13,7 @@ namespace ProjectManager.Gateway
         {
             base.Load(builder);
             builder.RegisterType<ServiceClient>().As<IServiceClient>();
+            builder.RegisterGeneric(typeof(ServiceCallWrapper<>)).As(typeof(IServiceCallWrapper<>)).InstancePerLifetimeScope();
         }
     }
 }

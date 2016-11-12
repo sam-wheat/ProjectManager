@@ -20,23 +20,27 @@ namespace ProjectManager.Gateway
 
         public IServiceCallWrapper<T> OfType<T>() where T : class, IDisposable
         {
-            return new ServiceCallWrapper<T>(container);
+            return container.Resolve<IServiceCallWrapper<T>>();
         }
     }
 
     public class ServiceCallWrapper<T> : IServiceCallWrapper<T> where T : class, IDisposable
     {
-        private ILifetimeScope _container;
+        private ILifetimeScope container;
+        private INetworkUtilities networkUtilities;
+        private IEndPointTypeResolver endPointResolver;
 
-        internal ServiceCallWrapper(ILifetimeScope container)
+        public ServiceCallWrapper(ILifetimeScope container, INetworkUtilities networkUtilities, IEndPointTypeResolver endPointResolver)
         {
-            _container = container;
+            this.networkUtilities = networkUtilities;
+            this.container = container;
+            this.endPointResolver = endPointResolver;
         }
 
         public void Try(Action<T> method)
         {
 
-            using (var scope = _container.BeginLifetimeScope())
+            using (var scope = container.BeginLifetimeScope())
             {
                 T client = ResolveClient(scope);
                 method(client);
@@ -45,7 +49,7 @@ namespace ProjectManager.Gateway
 
         public TResult Try<TResult>(Func<T, TResult> method)
         {
-            using (var scope = _container.BeginLifetimeScope())
+            using (var scope = container.BeginLifetimeScope())
             {
                 T client = ResolveClient(scope);
                 return method(client);
@@ -54,7 +58,7 @@ namespace ProjectManager.Gateway
 
         public async Task TryAsync(Func<T, Task> method)
         {
-            using (var scope = _container.BeginLifetimeScope())
+            using (var scope = container.BeginLifetimeScope())
             {
                 T client = ResolveClient(scope);
                 await method(client);
@@ -63,7 +67,7 @@ namespace ProjectManager.Gateway
 
         public async Task<TResult> TryAsync<TResult>(Func<T, Task<TResult>> method)
         {
-            using (var scope = _container.BeginLifetimeScope())
+            using (var scope = container.BeginLifetimeScope())
             {
                 T client = ResolveClient(scope);
                 return await method(client);
@@ -73,12 +77,15 @@ namespace ProjectManager.Gateway
         protected virtual T ResolveClient(ILifetimeScope container)
         {
             T client = default(T);
+            IAPI api = endPointResolver.Resolve(typeof(T));
 
-            if (false)                       //if (Utilities.VerifyNetworkConnectivity())
-                client = container.ResolveKeyed<T>(EndPointType.InProcess);
-            else
-                client = container.ResolveKeyed<T>(EndPointType.REST);
-
+            foreach (EndPointType endPointType in api.EndPointPreferences)
+            {
+                if (false)
+                    client = container.ResolveKeyed<T>(EndPointType.InProcess);
+                else
+                    client = container.ResolveKeyed<T>(EndPointType.REST);
+            }
             return client;
         }
     }

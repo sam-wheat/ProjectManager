@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Core;
-using ProjectManager.Core;
-using ProjectManager.Domain.Twitter;
+using TwitterAPI.Services;
+using TwitterAPI.Domain;
 
-namespace ProjectManager.Services.Twitter
+namespace TwitterAPI
 {
     public class IOCModule : Module
     {
