@@ -81,6 +81,12 @@ namespace ProjectManager.Gateway
 
             foreach (EndPointType endPointType in api.EndPointPreferences)
             {
+                IEndPointConfiguration endpoint;
+
+                if (endPointType == EndPointType.InProcess)
+                    endpoint = container.ResolveKeyed<InProcessEndPoint>(api.API_Name) as IEndPointConfiguration;    
+
+
                 if (false)
                     client = container.ResolveKeyed<T>(EndPointType.InProcess);
                 else
