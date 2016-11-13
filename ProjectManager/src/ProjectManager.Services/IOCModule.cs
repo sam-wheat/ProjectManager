@@ -19,7 +19,7 @@ namespace ProjectManager.Services
                 .As<IDbContextOptions>()
                 .WithParameter(new ResolvedParameter(
                     (p, c) => p.ParameterType == typeof(InProcessEndPoint),
-                    (p, c) => c.ResolveKeyed<InProcessEndPoint>(APIName.ProjectManager)
+                    (p, c) => c.ResolveKeyed<InProcessEndPoint>(APIName.ProjectManager.ToString())
                 ));
 
             builder.RegisterType<Db>().InstancePerLifetimeScope();  // One instance for all services that request a Db within a lifetimeScope

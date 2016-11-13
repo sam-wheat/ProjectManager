@@ -4,6 +4,6 @@
     {
         bool IsConnectionStringValid(string connectionString);
         bool IsNetworkAvailable();
-        bool VerifyDBServerConnectivity(string WindowsDomainName, string connectionString);
+        bool VerifyDBServerConnectivity(string connectionString);
     }
 }

@@ -18,7 +18,7 @@ namespace ProjectManager.Services.REST
             builder.RegisterType<UsersService>().Keyed<IUsersService>(EndPointType.REST)
                  .WithParameter(new ResolvedParameter(
                     (p, c) => p.ParameterType == typeof(RESTEndPoint),
-                    (p, c) => c.ResolveKeyed<RESTEndPoint>(APIName.ProjectManager)
+                    (p, c) => c.ResolveKeyed<RESTEndPoint>(APIName.ProjectManager.ToString())
                 ));
         }
     }

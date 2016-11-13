@@ -45,7 +45,7 @@ namespace ProjectManager.Core
         /// and that valid connection strings exist and that the DB server is up and running and accepting connections.
         /// </summary>
         /// <returns></returns>
-        public bool VerifyDBServerConnectivity(string WindowsDomainName, string connectionString)
+        public bool VerifyDBServerConnectivity(string connectionString)
         {
             bool success = false;
 

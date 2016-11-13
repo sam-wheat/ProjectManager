@@ -37,7 +37,7 @@ namespace ProjectManager.Gateway
         private static void RegisterEndPoint(EndPointConfigurationTemplate template, ContainerBuilder builder, Type apiNames)
         {
             IEndPointConfiguration config;
-            object apiName = Enum.Parse(apiNames, template.API_Name);
+            string apiName = Enum.Parse(apiNames, template.API_Name).ToString();
 
             switch (template.EndPointType)
             {
