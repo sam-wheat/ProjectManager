@@ -11,12 +11,12 @@ namespace ProjectManager.Core
     {
         public DbContextOptions Options { get; private set; }
 
-        public ServiceDbContextOptions(InProcessEndPoint endpoint)
+        public ServiceDbContextOptions(IEndPointConfiguration endpoint)
         {
             Configure(endpoint);
         }
 
-        public virtual void Configure(InProcessEndPoint endpoint)
+        public virtual void Configure(IEndPointConfiguration endpoint)
         {
             var builder = new DbContextOptionsBuilder();
             builder.UseSqlServer(endpoint.ConnectionString);

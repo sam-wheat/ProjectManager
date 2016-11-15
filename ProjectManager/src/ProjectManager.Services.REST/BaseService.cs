@@ -11,7 +11,7 @@ namespace ProjectManager.Services.REST
     {
         public HttpClient httpClient { get; private set; }
 
-        public BaseService(RESTEndPoint endPoint)
+        public BaseService(IEndPointConfiguration endPoint)
         {
             httpClient = new HttpClient { BaseAddress = new Uri(endPoint.ConnectionString) };
         }

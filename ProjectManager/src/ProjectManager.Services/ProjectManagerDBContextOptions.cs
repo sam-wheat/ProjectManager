@@ -8,7 +8,7 @@ namespace ProjectManager.Services
 {
     public class ProjectManagerDbContextOptions : ServiceDbContextOptions
     {
-        public ProjectManagerDbContextOptions(InProcessEndPoint endPoint) : base(endPoint)
+        public ProjectManagerDbContextOptions(IEndPointConfiguration endPoint) : base(endPoint)
         {
 
         }

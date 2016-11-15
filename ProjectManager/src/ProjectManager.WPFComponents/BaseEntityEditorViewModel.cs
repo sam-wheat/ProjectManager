@@ -97,7 +97,7 @@ namespace ProjectManager.WPFComponents
         public ICommand CopyCommand { get; set; }
         public ICommand RefreshCommand { get; set; }
 
-        public BaseEntityEditorViewModel(IServiceClient serviceClient, IStateManager stateManager) : base(serviceClient, stateManager)
+        public BaseEntityEditorViewModel(IStateManager stateManager) : base(stateManager)
         {
             // handle this to close the window when the app shuts down: App.Current.Dispatcher.ShutdownStarted 
             DataSource = new EntityServerModeSource();

@@ -16,7 +16,6 @@ namespace ProjectManager.WPFComponents
     public abstract class BaseViewModel : INotifyPropertyChanged
     {
         public event EventHandler CloseViewEvent;
-        public readonly IServiceClient ServiceClient;
         public CommandBindingCollection CommandBindings;
 
         private IStateManager _StateManager;
@@ -48,9 +47,8 @@ namespace ProjectManager.WPFComponents
         }
 
 
-        public BaseViewModel(IServiceClient serviceClient, IStateManager stateManager)
+        public BaseViewModel(IStateManager stateManager)
         {
-            ServiceClient = serviceClient;
             StateManager = stateManager;
             CommandBindings = new CommandBindingCollection();
         }

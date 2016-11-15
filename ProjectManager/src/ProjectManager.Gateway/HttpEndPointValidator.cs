@@ -8,10 +8,16 @@ namespace ProjectManager.Gateway
 {
     public class HttpEndPointValidator : IEndPointValidator
     {
+        private INetworkUtilities networkUtilities;
+
+        public HttpEndPointValidator(INetworkUtilities networkUtilities)
+        {
+            this.networkUtilities = networkUtilities;
+        }
+
         public bool IsInterfaceAlive(IEndPointConfiguration endPoint)
         {
-            bool result = false;
-            return result;
+            return networkUtilities.VerifyHttpServerAvailability(endPoint.ConnectionString);
         }
     }
 }

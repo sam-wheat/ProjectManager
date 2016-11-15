@@ -12,7 +12,7 @@ namespace ProjectManager.Services.REST
 {
     public class UsersService : BaseService, IUsersService
     {
-        public UsersService(RESTEndPoint endPoint) :base(endPoint)
+        public UsersService(IEndPointConfiguration endPoint) :base(endPoint)
         {
 
         }

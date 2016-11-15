@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
+using Autofac;
 using NUnit;
 using NUnit.Framework;
 using ProjectManager.Core;
@@ -15,17 +16,18 @@ namespace ProjectManager.Tests
     [TestFixture]
     public class UsersServiceTests : BaseTest
     {
-        
+        IServiceGateway<IUsersService> usersService;
+
         public UsersServiceTests()
         {
-            
+            usersService = this.container.Resolve<IServiceGateway<IUsersService>>();
         }
 
         [Test]
         public void Test1()
         {
-            IAsyncServiceResult result = ServiceClient.OfType<IUsersService>().TryAsync(x => x.SaveUser(new User { Name = "User 1", Password = "x", IsActive = true })).Result;
-            IAsyncServiceResult<User> userResult = ServiceClient.OfType<IUsersService>().TryAsync(x => x.GetUser("User 1", "x")).Result;
+            IAsyncServiceResult result = usersService.TryAsync(x => x.SaveUser(new User { Name = "User 1", Password = "x", IsActive = true })).Result;
+            IAsyncServiceResult<User> userResult = usersService.TryAsync(x => x.GetUser("User 1", "x")).Result;
             Assert.IsNotNull(userResult.Data);
             Assert.AreEqual("User 1", userResult.Data.Name);
             Test2();

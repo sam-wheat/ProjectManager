@@ -13,7 +13,7 @@ namespace ProjectManager.API.Controllers
     [Route("api/[controller]")]
     public class ValuesController : BaseController
     {
-        public ValuesController(IServiceClient serviceClient) : base(serviceClient)
+        public ValuesController() 
         {
 
         }

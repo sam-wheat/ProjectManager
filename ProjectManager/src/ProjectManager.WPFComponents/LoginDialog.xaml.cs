@@ -67,14 +67,14 @@ namespace ProjectManager.WPFComponents
                 }
             }
         }
-        private IServiceClient serviceClient;
         private IStateManager stateManager;
+        private IServiceGateway<IUsersService> usersService;
 
-        public LoginDialog(IServiceClient serviceClient, IStateManager stateManager)
+        public LoginDialog(IServiceGateway<IUsersService> usersService, IStateManager stateManager)
         {
             InitializeComponent();
             DataContext = this;
-            this.serviceClient = serviceClient;
+            this.usersService = usersService;
             txtUserName.Focus();
             ErrorMsgVisibility = Visibility.Hidden;
             UserName = "admin";
@@ -88,7 +88,7 @@ namespace ProjectManager.WPFComponents
             else
             {
                 // plug
-                //AsyncResult<User> userResult = await serviceClient.OfType<IUsersService>().TryAsync(x => x.GetUser(UserName, Password));
+                //AsyncResult<User> userResult = await serviceClient<IUsersService>().TryAsync(x => x.GetUser(UserName, Password));
                 User user = null;
                 // end plug
 

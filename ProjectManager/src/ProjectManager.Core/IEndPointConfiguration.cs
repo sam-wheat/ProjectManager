@@ -7,7 +7,8 @@ namespace ProjectManager.Core
 {
     public interface IEndPointConfiguration
     {
-        string API_Name { get; set; }
+        string Name { get; set; }
+        EndPointType EndPointType { get; set; }
         string ConnectionString { get; set; }
         Dictionary<string, string> Parameters { get; set; }
     }

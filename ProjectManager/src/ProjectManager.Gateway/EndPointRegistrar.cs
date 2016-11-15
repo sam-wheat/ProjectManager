@@ -14,52 +14,26 @@ namespace ProjectManager.Gateway
 {
     public static class EndPointRegistrar
     {
-        public static void Register(List<EndPointConfigurationTemplate> templates, ContainerBuilder builder, Type apiNames)
+        public static void Register(IEnumerable<EndPointConfiguration> configs, ContainerBuilder builder)
         {
-            if (templates == null)
+            if (configs == null)
                 return;
 
             if (builder == null)
                 throw new ArgumentNullException("builder");
 
-            if (apiNames == null)
-                throw new ArgumentNullException("apiNames");
+            configs = configs.Where(x => x.IsActive);
 
-            var dupes = templates.GroupBy(x => new { x.API_Name, x.EndPointType }).Where(x => x.Count() > 1);
+            if (configs.Any(x => string.IsNullOrEmpty(x.Name)))
+                throw new Exception("One or more EndPointConfigurations has a blank name.  Name is required for all EndPointConfigurations");
+
+            var dupes = configs.GroupBy(x => new { x.Name }).Where(x => x.Count() > 1);
 
             if (dupes.Any())
-                throw new Exception($"Duplicate EndPointConfiguration found.  API_Name: {dupes.First().Key.API_Name}, EndPointType: {dupes.First().Key.EndPointType}.");
+                throw new Exception($"Duplicate EndPointConfiguration found. EndPoint Name: {dupes.First().Key.Name}." + Environment.NewLine + "Each EndPoint must have a unique name.  Set the Active flag to false to bypass an EndPoint.");
 
-            foreach (EndPointConfigurationTemplate template in templates)
-                RegisterEndPoint(template, builder, apiNames);
-        }
-
-        private static void RegisterEndPoint(EndPointConfigurationTemplate template, ContainerBuilder builder, Type apiNames)
-        {
-            IEndPointConfiguration config;
-            string apiName = Enum.Parse(apiNames, template.API_Name).ToString();
-
-            switch (template.EndPointType)
-            {
-                case EndPointType.InProcess:
-                    config = new InProcessEndPoint();
-                    builder.RegisterInstance(config).Keyed<InProcessEndPoint>(apiName).SingleInstance();
-                    break;
-                case EndPointType.REST:
-                    config = new RESTEndPoint();
-                    builder.RegisterInstance(config).Keyed<RESTEndPoint>(apiName).SingleInstance();
-                    break;
-                case EndPointType.WCF:
-                    config = new WCFEndPoint();
-                    builder.RegisterInstance(config).As<WCFEndPoint>().SingleInstance();
-                    break;
-                default:
-                    throw new Exception("EndPoint type not recognized.");
-            }
-
-            config.API_Name = template.API_Name;
-            config.ConnectionString = template.ConnectionString;
-            config.Parameters = template.Parameters;
+            foreach (EndPointConfiguration config in configs)
+                builder.RegisterInstance(config).Keyed<IEndPointConfiguration>(config.Name).SingleInstance();
         }
     }
 }

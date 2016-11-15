@@ -18,9 +18,11 @@ namespace ProjectManager.API.Controllers
     [Route("api/[controller]")]
     public class UsersController : BaseController, IUsersService
     {
-        public UsersController(IServiceClient serviceClient) : base(serviceClient)
-        {
+        private IServiceGateway<IUsersService> usersService;
 
+        public UsersController(IServiceGateway<IUsersService> userService) 
+        {
+            this.usersService = usersService;
         }
 
         [HttpPost][Route("DeleteUser")]
@@ -40,7 +42,7 @@ namespace ProjectManager.API.Controllers
         [Route("GetUser")]
         public async Task<IAsyncServiceResult<User>> GetUser(string userName, string password)
         {
-            return await ServiceClient.OfType<IUsersService>().TryAsync(x => x.GetUser(userName, password));
+            return await usersService.TryAsync(x => x.GetUser(userName, password));
         }
 
         [HttpGet]
@@ -54,7 +56,7 @@ namespace ProjectManager.API.Controllers
         [Route("SaveUser")]
         public async Task<IAsyncServiceResult> SaveUser(User user)
         {
-            return await ServiceClient.OfType<IUsersService>().TryAsync(x => x.SaveUser(user));
+            return await usersService.TryAsync(x => x.SaveUser(user));
         }
 
         [HttpGet]

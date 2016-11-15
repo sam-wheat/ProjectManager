@@ -47,8 +47,8 @@ namespace ProjectManager.API
                 options.OutputFormatters.RemoveType<JsonOutputFormatter>();
                 options.OutputFormatters.Insert(0, formatter);
             });
-            services.Configure<List<EndPointConfigurationTemplate>>(Configuration.GetSection("EndPointConfigurations"));
-            List<EndPointConfigurationTemplate> templates = ConfigurationBinder.Bind<List<EndPointConfigurationTemplate>>(Configuration.GetSection("EndPointConfigurations"));
+            services.Configure<List<EndPointConfiguration>>(Configuration.GetSection("EndPointConfigurations"));
+            List<EndPointConfiguration> templates = ConfigurationBinder.Bind<List<EndPointConfiguration>>(Configuration.GetSection("EndPointConfigurations"));
 
             // Autofac
             var builder = new ContainerBuilder();
@@ -56,7 +56,7 @@ namespace ProjectManager.API
             builder.RegisterModule(new ProjectManager.Services.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.Populate(services);
-            Gateway.EndPointRegistrar.Register(templates, builder, typeof(APIName));
+            Gateway.EndPointRegistrar.Register(templates, builder);
             var container = builder.Build();
             IEndPointConfiguration conn = container.Resolve<IEndPointConfiguration>();
             conn.ConnectionString = ConfigManager.ConnectionString;

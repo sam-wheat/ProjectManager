@@ -15,11 +15,7 @@ namespace ProjectManager.Services.REST
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
-            builder.RegisterType<UsersService>().Keyed<IUsersService>(EndPointType.REST)
-                 .WithParameter(new ResolvedParameter(
-                    (p, c) => p.ParameterType == typeof(RESTEndPoint),
-                    (p, c) => c.ResolveKeyed<RESTEndPoint>(APIName.ProjectManager.ToString())
-                ));
+            builder.RegisterType<UsersService>().Keyed<IUsersService>(EndPointType.REST);
         }
     }
 }

@@ -69,7 +69,7 @@ namespace ProjectManager.WPFComponents
         public RoutedCommand CancelProcessCommand { get; set; }
         protected CancellationTokenSource CancelTokenSource;
 
-        public BaseProcessViewModel(IServiceClient serviceClient, IStateManager stateManager) : base(serviceClient, stateManager)
+        public BaseProcessViewModel(IStateManager stateManager) : base(stateManager)
         {
             _StatusMessage = new StringBuilder(10000);
             IsRunning = true;

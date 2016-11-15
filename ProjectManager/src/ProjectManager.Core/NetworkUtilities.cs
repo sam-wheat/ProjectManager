@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Data.SqlClient;
 using System.Net.NetworkInformation;
 using System.Security.Principal;
@@ -9,7 +11,7 @@ namespace ProjectManager.Core
 {
     public class NetworkUtilities : INetworkUtilities
     {
-        public bool IsConnectionStringValid(string connectionString)
+        public virtual bool IsConnectionStringValid(string connectionString)
         {
             bool result = true;
 
@@ -32,7 +34,7 @@ namespace ProjectManager.Core
         /// Verifies a network interface exists. 
         /// </summary>
         /// <returns></returns>
-        public bool IsNetworkAvailable()
+        public virtual bool IsNetworkAvailable()
         {
             bool success = NetworkInterface.GetIsNetworkAvailable();
             return success;
@@ -45,13 +47,26 @@ namespace ProjectManager.Core
         /// and that valid connection strings exist and that the DB server is up and running and accepting connections.
         /// </summary>
         /// <returns></returns>
-        public bool VerifyDBServerConnectivity(string connectionString)
+        public virtual bool VerifyDBServerConnectivity(string connectionString)
+        {
+            bool success = false;
+
+            if (IsNetworkAvailable())
+                success = IsConnectionStringValid(connectionString);
+
+            return success;
+        }
+
+        public virtual bool VerifyHttpServerAvailability(string url)
         {
             bool success = false;
 
             if (IsNetworkAvailable())
             {
-                success = IsConnectionStringValid(connectionString);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                request.Method = "Head";
+                HttpWebResponse response = (HttpWebResponse)request.GetResponseAsync().Result;
+                success = response.StatusCode == HttpStatusCode.OK;
             }
             return success;
         }

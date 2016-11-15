@@ -19,7 +19,6 @@ namespace ProjectManager.Tests
     public class BaseTest
     {
         protected IContainer container { get; private set; }
-        protected IServiceClient ServiceClient { get; private set; }
         protected IConfiguration Configuration { get; set; }
 
         public BaseTest()
@@ -37,10 +36,10 @@ namespace ProjectManager.Tests
             EndPointTypeResolver epr = new EndPointTypeResolver();
             epr.Register(typeof(IUsersService), new ProjectManagerAPI());
             
-            List<EndPointConfigurationTemplate> templates = ConfigurationBinder.Bind<List<EndPointConfigurationTemplate>>(Configuration.GetSection("EndPointConfigurations"));
+            List<EndPointConfiguration> templates = ConfigurationBinder.Bind<List<EndPointConfiguration>>(Configuration.GetSection("EndPointConfigurations"));
             ContainerBuilder builder = new ContainerBuilder();
             builder.RegisterInstance(epr).As<IEndPointTypeResolver>().SingleInstance();
-            Gateway.EndPointRegistrar.Register(templates, builder, typeof(APIName));
+            Gateway.EndPointRegistrar.Register(templates, builder);
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());
@@ -51,7 +50,7 @@ namespace ProjectManager.Tests
 
         protected void CreateServiceClient()
         {
-            ServiceClient = container.Resolve<IServiceClient>();
+            //ServiceClient = container.Resolve<IServiceClient>();
         }
 
         protected void InitializeDatabase()
@@ -62,7 +61,7 @@ namespace ProjectManager.Tests
 
         protected void SeedDatabase()
         {
-            //ServiceClient.OfType<IUsersService>().Try(x => x.SeedDB()).Wait();
+            //ServiceClient<IUsersService>().Try(x => x.SeedDB()).Wait();
         }
     }
 }

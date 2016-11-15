@@ -9,32 +9,31 @@ using ProjectManager.Core;
 
 namespace ProjectManager.Gateway
 {
-    public class ServiceClient : IServiceClient
-    {
-        private ILifetimeScope container;
+    //public class ServiceClient : IServiceClient
+    //{
+    //    private ILifetimeScope container;
 
-        public ServiceClient(ILifetimeScope container)
-        {
-            this.container = container;
-        }
+    //    public ServiceClient(ILifetimeScope container)
+    //    {
+    //        this.container = container;
+    //    }
 
-        public IServiceCallWrapper<T> OfType<T>() where T : class, IDisposable
-        {
-            return container.Resolve<IServiceCallWrapper<T>>();
-        }
-    }
+    //    public IServiceCallWrapper<T> OfType<T>() where T : class, IDisposable
+    //    {
+    //        return container.Resolve<IServiceCallWrapper<T>>();
+    //    }
+    //}
 
-    public class ServiceCallWrapper<T> : IServiceCallWrapper<T> where T : class, IDisposable
+    public abstract class ServiceGateway<T> : IServiceGateway<T> where T : class, IDisposable
     {
         private ILifetimeScope container;
         private INetworkUtilities networkUtilities;
-        private IEndPointTypeResolver endPointResolver;
+        public abstract string[] EndPointNames { get; protected set; }
 
-        public ServiceCallWrapper(ILifetimeScope container, INetworkUtilities networkUtilities, IEndPointTypeResolver endPointResolver)
+        public ServiceGateway(ILifetimeScope container, INetworkUtilities networkUtilities)
         {
             this.networkUtilities = networkUtilities;
             this.container = container;
-            this.endPointResolver = endPointResolver;
         }
 
         public void Try(Action<T> method)
@@ -77,16 +76,20 @@ namespace ProjectManager.Gateway
         protected virtual T ResolveClient(ILifetimeScope container)
         {
             T client = default(T);
-            IAPI api = endPointResolver.Resolve(typeof(T));
 
-            foreach (EndPointType endPointType in api.EndPointPreferences)
+            foreach (string endPointName in EndPointNames)
             {
-                client = container.ResolveKeyed<T>(endPointType);
+                IEndPointConfiguration endPoint = container.ResolveKeyed<IEndPointConfiguration>(endPointName);
+                IEndPointValidator validator = container.ResolveKeyed<IEndPointValidator>(endPoint.EndPointType.ToString());
+             
+
+                if (!validator.IsInterfaceAlive(endPoint))
+                    continue;
+
+                client = container.ResolveKeyed<T>(endPoint.EndPointType);
+                break;
             }
             return client;
         }
-
-
-        
     }
 }

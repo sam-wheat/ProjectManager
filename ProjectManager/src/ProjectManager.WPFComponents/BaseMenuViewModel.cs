@@ -58,7 +58,7 @@ namespace ProjectManager.WPFComponents
             }
         }
 
-        public BaseMenuViewModel(IServiceClient serviceClient, IStateManager stateManager) : base(serviceClient, stateManager)
+        public BaseMenuViewModel(IStateManager stateManager) : base(stateManager)
         {
             Tiles = new ObservableCollection<Tile>();
         }

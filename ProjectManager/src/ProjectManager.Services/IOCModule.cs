@@ -15,13 +15,7 @@ namespace ProjectManager.Services
         {
             base.Load(builder);
             builder.RegisterType<Integration.DropAndRecreateInitializer>();
-            builder.RegisterType<ProjectManagerDbContextOptions>()
-                .As<IDbContextOptions>()
-                .WithParameter(new ResolvedParameter(
-                    (p, c) => p.ParameterType == typeof(InProcessEndPoint),
-                    (p, c) => c.ResolveKeyed<InProcessEndPoint>(APIName.ProjectManager.ToString())
-                ));
-
+            builder.RegisterType<ProjectManagerDbContextOptions>();
             builder.RegisterType<Db>().InstancePerLifetimeScope();  // One instance for all services that request a Db within a lifetimeScope
             builder.RegisterType<ActivitiesService>().As<IActivitiesService>();
             builder.RegisterType<ContactsService>().As<IContactsService>();

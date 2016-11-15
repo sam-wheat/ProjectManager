@@ -72,7 +72,7 @@ namespace ProjectManager.Core
             productDataDir = config["Config:ProductDataDir"]; // do not use leading "\" in appsettings
             ConnectionStringName = config["Config:CurrentConnectionString"];
             ConnectionString = (config["ConnectionStrings:" + ConnectionStringName]).Replace("{DataDirectory}", AppDataDir);
-            var endpoints = ConfigurationBinder.Bind<List<EndPointConfigurationTemplate>>(config.GetSection("EndPointConfigurations"));
+            var endpoints = ConfigurationBinder.Bind<List<EndPointConfiguration>>(config.GetSection("EndPointConfigurations"));
         }
 
         public static IConfigurationRoot GetConfigurationRoot()

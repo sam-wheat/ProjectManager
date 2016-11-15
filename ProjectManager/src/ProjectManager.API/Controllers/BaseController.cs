@@ -9,11 +9,11 @@ namespace ProjectManager.API.Controllers
 {
     public abstract class BaseController : Controller
     {
-        public readonly IServiceClient ServiceClient;
+        
 
-        public BaseController(IServiceClient serviceClient)
+        public BaseController()
         {
-            ServiceClient = serviceClient;
+
         }
     }
 }
