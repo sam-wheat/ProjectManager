@@ -8,6 +8,8 @@ namespace ProjectManager.Core
     public class EndPointConfiguration : IEndPointConfiguration
     {
         public string Name { get; set; }
+        public string API_Name { get; set; }
+        public int Preference { get; set; }
         public EndPointType EndPointType { get; set; }
         public string ConnectionString { get; set; }
         public Dictionary<string, string> Parameters { get; set; }

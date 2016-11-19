@@ -14,26 +14,26 @@ namespace ProjectManager.Gateway
 {
     public static class EndPointRegistrar
     {
-        public static void Register(IEnumerable<EndPointConfiguration> configs, ContainerBuilder builder)
+        public static void Register(IEnumerable<EndPointConfiguration> endPoints, ContainerBuilder builder)
         {
-            if (configs == null)
+            if (endPoints == null)
                 return;
 
             if (builder == null)
                 throw new ArgumentNullException("builder");
 
-            configs = configs.Where(x => x.IsActive);
+            endPoints = endPoints.Where(x => x.IsActive);
 
-            if (configs.Any(x => string.IsNullOrEmpty(x.Name)))
+            if (endPoints.Any(x => string.IsNullOrEmpty(x.Name)))
                 throw new Exception("One or more EndPointConfigurations has a blank name.  Name is required for all EndPointConfigurations");
 
-            var dupes = configs.GroupBy(x => new { x.Name }).Where(x => x.Count() > 1);
+            var dupes = endPoints.GroupBy(x => new { x.Name }).Where(x => x.Count() > 1);
 
             if (dupes.Any())
                 throw new Exception($"Duplicate EndPointConfiguration found. EndPoint Name: {dupes.First().Key.Name}." + Environment.NewLine + "Each EndPoint must have a unique name.  Set the Active flag to false to bypass an EndPoint.");
 
-            foreach (EndPointConfiguration config in configs)
-                builder.RegisterInstance(config).Keyed<IEndPointConfiguration>(config.Name).SingleInstance();
+            foreach (EndPointConfiguration endPoint in endPoints)
+                builder.RegisterInstance(endPoint).Keyed<IEndPointConfiguration>(endPoint.Name).SingleInstance();
         }
     }
 }

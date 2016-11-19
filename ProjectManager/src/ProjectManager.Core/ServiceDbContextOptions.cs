@@ -11,9 +11,9 @@ namespace ProjectManager.Core
     {
         public DbContextOptions Options { get; private set; }
 
-        public ServiceDbContextOptions(IEndPointConfiguration endpoint)
+        public ServiceDbContextOptions(IEndPointConfiguration endPoint)
         {
-            Configure(endpoint);
+            Configure(endPoint);
         }
 
         public virtual void Configure(IEndPointConfiguration endpoint)

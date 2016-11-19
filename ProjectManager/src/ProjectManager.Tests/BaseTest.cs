@@ -33,13 +33,16 @@ namespace ProjectManager.Tests
 
         protected void BuildContainer()
         {
-            EndPointTypeResolver epr = new EndPointTypeResolver();
-            epr.Register(typeof(IUsersService), new ProjectManagerAPI());
+            ClientResolver clientResolver = new ClientResolver(new NetworkUtilities());
+
+
+            clientResolver.RegisterService(IUsersService,)
+
             
             List<EndPointConfiguration> templates = ConfigurationBinder.Bind<List<EndPointConfiguration>>(Configuration.GetSection("EndPointConfigurations"));
             ContainerBuilder builder = new ContainerBuilder();
-            builder.RegisterInstance(epr).As<IEndPointTypeResolver>().SingleInstance();
             Gateway.EndPointRegistrar.Register(templates, builder);
+            builder.RegisterInstance(clientResolver).As<IClientResolver>().SingleInstance();
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());

@@ -8,6 +8,6 @@ namespace ProjectManager.Core
     public interface IAPI
     {
         string API_Name { get; }
-        IList<EndPointType> EndPointPreferences { get; }
+        IList<string> EndPointNames { get; }
     }
 }

@@ -61,6 +61,10 @@ namespace ProjectManager.Core
             }
                 
         }
+        /// <summary>
+        /// Returns the list of EndPoints defined in the config file.
+        /// </summary>
+        public static IEnumerable<IEndPointConfiguration> EndPoints { get; private set; }
         private static string environmentName;
         private static string productDataDir;
         private static string userDataDir;
@@ -72,7 +76,7 @@ namespace ProjectManager.Core
             productDataDir = config["Config:ProductDataDir"]; // do not use leading "\" in appsettings
             ConnectionStringName = config["Config:CurrentConnectionString"];
             ConnectionString = (config["ConnectionStrings:" + ConnectionStringName]).Replace("{DataDirectory}", AppDataDir);
-            var endpoints = ConfigurationBinder.Bind<List<EndPointConfiguration>>(config.GetSection("EndPointConfigurations"));
+            EndPoints = ConfigurationBinder.Bind<List<EndPointConfiguration>>(config.GetSection("EndPointConfigurations"));
         }
 
         public static IConfigurationRoot GetConfigurationRoot()

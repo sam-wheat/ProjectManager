@@ -17,6 +17,7 @@ namespace ProjectManager.Gateway
             builder.RegisterType<InProcessEndPointValidator>().Keyed<IEndPointValidator>(EndPointType.InProcess);
             builder.RegisterType<HttpEndPointValidator>().Keyed<IEndPointValidator>(EndPointType.WCF);
             builder.RegisterType<HttpEndPointValidator>().Keyed<IEndPointValidator>(EndPointType.REST);
+            builder.RegisterType<ClientResolver>().As<IClientResolver>();
         }
     }
 }

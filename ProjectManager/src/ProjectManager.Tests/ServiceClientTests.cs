@@ -19,8 +19,6 @@ namespace ProjectManager.Tests
         {
             ILifetimeScope scope = container.Resolve<ILifetimeScope>();
             INetworkUtilities networkUtilities = Moqs.NetworkUtilitiesMoq();
-            IEndPointTypeResolver endPointTypeResolver = container.Resolve<IEndPointTypeResolver>();
-            ServiceGateway<IUsersService> usersService = new ProjectManagerServiceGateway<IUsersService>(scope, networkUtilities);
         }
     }
 }

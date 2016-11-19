@@ -27,21 +27,19 @@ namespace ProjectManager.Gateway
     public abstract class ServiceGateway<T> : IServiceGateway<T> where T : class, IDisposable
     {
         private ILifetimeScope container;
-        private INetworkUtilities networkUtilities;
-        public abstract string[] EndPointNames { get; protected set; }
+        private IClientResolver resolver;
 
-        public ServiceGateway(ILifetimeScope container, INetworkUtilities networkUtilities)
+        public ServiceGateway(ILifetimeScope container, IClientResolver resolver)
         {
-            this.networkUtilities = networkUtilities;
             this.container = container;
+            this.resolver = resolver;
         }
 
         public void Try(Action<T> method)
         {
-
             using (var scope = container.BeginLifetimeScope())
             {
-                T client = ResolveClient(scope);
+                T client = resolver.ResolveClient<T>(scope);
                 method(client);
             }
         }
@@ -50,7 +48,7 @@ namespace ProjectManager.Gateway
         {
             using (var scope = container.BeginLifetimeScope())
             {
-                T client = ResolveClient(scope);
+                T client = resolver.ResolveClient<T>(scope);
                 return method(client);
             }
         }
@@ -59,7 +57,7 @@ namespace ProjectManager.Gateway
         {
             using (var scope = container.BeginLifetimeScope())
             {
-                T client = ResolveClient(scope);
+                T client = resolver.ResolveClient<T>(scope);
                 await method(client);
             }
         }
@@ -68,28 +66,9 @@ namespace ProjectManager.Gateway
         {
             using (var scope = container.BeginLifetimeScope())
             {
-                T client = ResolveClient(scope);
+                T client = resolver.ResolveClient<T>(scope);
                 return await method(client);
             }
-        }
-
-        protected virtual T ResolveClient(ILifetimeScope container)
-        {
-            T client = default(T);
-
-            foreach (string endPointName in EndPointNames)
-            {
-                IEndPointConfiguration endPoint = container.ResolveKeyed<IEndPointConfiguration>(endPointName);
-                IEndPointValidator validator = container.ResolveKeyed<IEndPointValidator>(endPoint.EndPointType.ToString());
-             
-
-                if (!validator.IsInterfaceAlive(endPoint))
-                    continue;
-
-                client = container.ResolveKeyed<T>(endPoint.EndPointType);
-                break;
-            }
-            return client;
         }
     }
 }
