@@ -14,8 +14,7 @@ namespace ProjectManager.Services
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
-            builder.RegisterType<Integration.DropAndRecreateInitializer>();
-            builder.RegisterType<ProjectManagerDbContextOptions>();
+            builder.RegisterType<ServiceDbContextOptions>().WithParameter(new ResolvedParameter((p,c) => p.ParameterType == typeof(IEndPointConfiguration), (p,c) => c.Resolve<IClientResolver>().CurrentEndPoint));
             builder.RegisterType<Db>().InstancePerLifetimeScope();  // One instance for all services that request a Db within a lifetimeScope
             builder.RegisterType<ActivitiesService>().As<IActivitiesService>();
             builder.RegisterType<ContactsService>().As<IContactsService>();
@@ -23,8 +22,7 @@ namespace ProjectManager.Services
             builder.RegisterType<ProjectsService>().As<IProjectsService>();
             builder.RegisterType<RemindersService>().As<IRemindersService>();
             builder.RegisterType<UsersService>().Keyed<IUsersService>(EndPointType.InProcess);
-            builder.RegisterType<DatabaseUtilitiesServicecs>().As<IDatabaseUtilitiesService>();
-            
+            builder.RegisterType<DatabaseUtilitiesServicecs>().Keyed<IDatabaseUtilitiesService>(EndPointType.InProcess);
         }
     }
 }

@@ -56,7 +56,6 @@ namespace ProjectManager.API
             builder.RegisterModule(new ProjectManager.Services.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.Populate(services);
-            Gateway.EndPointRegistrar.Register(templates, builder);
             var container = builder.Build();
             IEndPointConfiguration conn = container.Resolve<IEndPointConfiguration>();
             conn.ConnectionString = ConfigManager.ConnectionString;

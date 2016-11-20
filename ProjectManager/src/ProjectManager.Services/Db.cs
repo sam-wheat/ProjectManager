@@ -26,7 +26,7 @@ namespace ProjectManager.Services
             //ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
-        public Db(ProjectManagerDbContextOptions options) : base(options.Options)
+        public Db(ServiceDbContextOptions options) : base(options.Options)
         {
             
         }

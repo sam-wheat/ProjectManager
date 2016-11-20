@@ -12,12 +12,10 @@ namespace ProjectManager.Gateway
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
-            //builder.RegisterType<ServiceClient>().As<IServiceClient>();
-            builder.RegisterGeneric(typeof(ServiceGateway<>)).As(typeof(IServiceGateway<>)).InstancePerLifetimeScope();
+            builder.RegisterGeneric(typeof(ServiceClient<>)).As(typeof(IServiceClient<>)).InstancePerLifetimeScope();
             builder.RegisterType<InProcessEndPointValidator>().Keyed<IEndPointValidator>(EndPointType.InProcess);
             builder.RegisterType<HttpEndPointValidator>().Keyed<IEndPointValidator>(EndPointType.WCF);
             builder.RegisterType<HttpEndPointValidator>().Keyed<IEndPointValidator>(EndPointType.REST);
-            builder.RegisterType<ClientResolver>().As<IClientResolver>();
         }
     }
 }

@@ -9,6 +9,7 @@ using NUnit.Framework;
 using ProjectManager.Core;
 using ProjectManager.Domain;
 using ProjectManager.Model.Domain;
+using ProjectManager.Gateway;
 
 namespace ProjectManager.Tests
 {
@@ -16,11 +17,11 @@ namespace ProjectManager.Tests
     [TestFixture]
     public class UsersServiceTests : BaseTest
     {
-        IServiceGateway<IUsersService> usersService;
+        IServiceClient<IUsersService> usersService;
 
         public UsersServiceTests()
         {
-            usersService = this.container.Resolve<IServiceGateway<IUsersService>>();
+            //usersService = this.container.Resolve<IServiceClient<IUsersService>>();
         }
 
         [Test]
@@ -30,16 +31,28 @@ namespace ProjectManager.Tests
             IAsyncServiceResult<User> userResult = usersService.TryAsync(x => x.GetUser("User 1", "x")).Result;
             Assert.IsNotNull(userResult.Data);
             Assert.AreEqual("User 1", userResult.Data.Name);
-            Test2();
         }
+
+
         [Test]
         public void Test2()
         {
-            string x = ConfigManager.AppCurrentDir;
-
-            //string url =  "http://localhost:51513/api/users/GetUser?UserName=User 1&Password=x";
-            //string json = new HttpClient().GetAsync(url).Result.Content.ReadAsStringAsync().Result;
-
+            ContainerBuilder builder = new ContainerBuilder();
+            AutoFacClientResolver clientResolver = new AutoFacClientResolver(builder);
+            clientResolver.RegisterEndPoints(ConfigManager.EndPoints);
+            clientResolver.RegisterAPI(typeof(IUsersService), APIName.ProjectManager.ToString());
+            builder.RegisterInstance(clientResolver).As<IClientResolver>().SingleInstance();
+            builder.RegisterModule(new ProjectManager.Core.IOCModule());
+            builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
+            builder.RegisterModule(new ProjectManager.Services.IOCModule());
+            builder.RegisterModule(new ProjectManager.Services.REST.IOCModule());
+            builder.RegisterModule(new Tests.IOCModule());
+            IContainer container = builder.Build();
+            IServiceClient<IUsersService> usersService = container.Resolve<IServiceClient<IUsersService>>();
+            IAsyncServiceResult result = usersService.TryAsync(x => x.SaveUser(new User { Name = "User 1", Password = "x", IsActive = true })).Result;
+            IAsyncServiceResult<User> userResult = usersService.TryAsync(x => x.GetUser("User 1", "x")).Result;
+            Assert.IsNotNull(userResult.Data);
+            Assert.AreEqual("User 1", userResult.Data.Name);
         }
     }
 }

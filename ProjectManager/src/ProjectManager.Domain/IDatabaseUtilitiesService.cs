@@ -8,5 +8,7 @@ namespace ProjectManager.Domain
     public interface IDatabaseUtilitiesService : IDisposable
     {
         void CreateOrUpdateDatabase();
+        void RecreateDb();
+        void EnsureCreated();
     }
 }

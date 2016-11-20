@@ -17,8 +17,8 @@ namespace ProjectManager.Tests
     {
         public void InProcess_ReturnsUser()
         {
-            ILifetimeScope scope = container.Resolve<ILifetimeScope>();
-            INetworkUtilities networkUtilities = Moqs.NetworkUtilitiesMoq();
+            //IServiceClient<IUsersService> usersService = new ServiceClient<IUsersService>();
+            //INetworkUtilities networkUtilities = Moqs.NetworkUtilitiesMoq();
         }
     }
 }

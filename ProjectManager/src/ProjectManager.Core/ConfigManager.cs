@@ -76,7 +76,25 @@ namespace ProjectManager.Core
             productDataDir = config["Config:ProductDataDir"]; // do not use leading "\" in appsettings
             ConnectionStringName = config["Config:CurrentConnectionString"];
             ConnectionString = (config["ConnectionStrings:" + ConnectionStringName]).Replace("{DataDirectory}", AppDataDir);
-            EndPoints = ConfigurationBinder.Bind<List<EndPointConfiguration>>(config.GetSection("EndPointConfigurations"));
+            EndPoints = new List<IEndPointConfiguration>();
+            IEnumerable<EndPointConfiguration> endPoints = ConfigurationBinder.Bind<List<EndPointConfiguration>>(config.GetSection("EndPointConfigurations"))
+                .Where(x => x.IsActive);
+
+            if (endPoints == null)
+                return;
+
+            if (endPoints.Any(x => string.IsNullOrEmpty(x.Name)))
+                throw new Exception("One or more EndPointConfigurations has a blank name.  Name is required for all EndPointConfigurations");
+
+            if (endPoints.Any(x => string.IsNullOrEmpty(x.API_Name)))
+                throw new Exception("One or more EndPointConfigurations has a blank API name.  API Name is required for all EndPointConfigurations");
+
+            var dupes = endPoints.GroupBy(x => new { x.Name }).Where(x => x.Count() > 1);
+
+            if (dupes.Any())
+                throw new Exception($"Duplicate EndPointConfiguration found. EndPoint Name: {dupes.First().Key.Name}." + Environment.NewLine + "Each EndPoint must have a unique name.  Set the Active flag to false to bypass an EndPoint.");
+
+            EndPoints = endPoints;
         }
 
         public static IConfigurationRoot GetConfigurationRoot()

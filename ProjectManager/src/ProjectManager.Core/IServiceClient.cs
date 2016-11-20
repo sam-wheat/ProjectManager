@@ -5,13 +5,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManager.Core
 {
-    //public interface IServiceClient
-    //{
-    //    IServiceCallWrapper<T> OfType<T>() where T : class, IDisposable;
-    //}
-
-
-    public interface IServiceGateway<T> where T : class, IDisposable
+    public interface IServiceClient<T> where T : class, IDisposable
     {
         void Try(Action<T> method);
         TResult Try<TResult>(Func<T, TResult> method);

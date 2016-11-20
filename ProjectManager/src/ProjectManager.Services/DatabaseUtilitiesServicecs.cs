@@ -27,6 +27,19 @@ namespace ProjectManager.Services
             }
         }
 
+        public void RecreateDb()
+        {
+            db.Database.EnsureDeleted();
+            db.SaveChanges();
+            EnsureCreated();
+        }
+
+        public void EnsureCreated()
+        {
+            db.Database.EnsureCreated();
+            db.SaveChanges();
+        }
+
         private void Seed()
         {
 

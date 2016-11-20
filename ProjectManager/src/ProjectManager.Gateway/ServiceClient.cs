@@ -5,31 +5,14 @@ using System.Threading.Tasks;
 using Autofac;
 using ProjectManager.Core;
 
-//http://stackoverflow.com/questions/15421430/autofac-delegate-factory-using-func
-
 namespace ProjectManager.Gateway
 {
-    //public class ServiceClient : IServiceClient
-    //{
-    //    private ILifetimeScope container;
-
-    //    public ServiceClient(ILifetimeScope container)
-    //    {
-    //        this.container = container;
-    //    }
-
-    //    public IServiceCallWrapper<T> OfType<T>() where T : class, IDisposable
-    //    {
-    //        return container.Resolve<IServiceCallWrapper<T>>();
-    //    }
-    //}
-
-    public abstract class ServiceGateway<T> : IServiceGateway<T> where T : class, IDisposable
+    public class ServiceClient<T> : IServiceClient<T> where T : class, IDisposable
     {
         private ILifetimeScope container;
         private IClientResolver resolver;
 
-        public ServiceGateway(ILifetimeScope container, IClientResolver resolver)
+        public ServiceClient(ILifetimeScope container, IClientResolver resolver)
         {
             this.container = container;
             this.resolver = resolver;

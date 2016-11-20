@@ -68,9 +68,9 @@ namespace ProjectManager.WPFComponents
             }
         }
         private IStateManager stateManager;
-        private IServiceGateway<IUsersService> usersService;
+        private IServiceClient<IUsersService> usersService;
 
-        public LoginDialog(IServiceGateway<IUsersService> usersService, IStateManager stateManager)
+        public LoginDialog(IServiceClient<IUsersService> usersService, IStateManager stateManager)
         {
             InitializeComponent();
             DataContext = this;

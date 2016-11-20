@@ -25,23 +25,17 @@ namespace ProjectManager.Tests
         {
             // https://weblog.west-wind.com/posts/2016/may/23/strongly-typed-configuration-settings-in-aspnet-core
             Configuration = ConfigManager.GetConfigurationRoot();
-            BuildContainer();
-            CreateServiceClient();
-            InitializeDatabase();
-            SeedDatabase();
+            //BuildContainer();
+            //InitializeDatabase();
         }
 
         protected void BuildContainer()
         {
-            ClientResolver clientResolver = new ClientResolver(new NetworkUtilities());
-
-
-            clientResolver.RegisterService(IUsersService,)
-
-            
-            List<EndPointConfiguration> templates = ConfigurationBinder.Bind<List<EndPointConfiguration>>(Configuration.GetSection("EndPointConfigurations"));
             ContainerBuilder builder = new ContainerBuilder();
-            Gateway.EndPointRegistrar.Register(templates, builder);
+            ClientResolver clientResolver = new ClientResolver();
+            clientResolver.RegisterEndPoints(ConfigManager.EndPoints);
+            clientResolver.RegisterAPI(typeof(IUsersService), APIName.ProjectManager.ToString());
+            clientResolver.RegisterAPI(typeof(IDatabaseUtilitiesService), APIName.ProjectManager.ToString());
             builder.RegisterInstance(clientResolver).As<IClientResolver>().SingleInstance();
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
@@ -51,20 +45,10 @@ namespace ProjectManager.Tests
             container = builder.Build();
         }
 
-        protected void CreateServiceClient()
-        {
-            //ServiceClient = container.Resolve<IServiceClient>();
-        }
-
         protected void InitializeDatabase()
         {
-            DropAndRecreateInitializer initializer = container.Resolve<DropAndRecreateInitializer>();
-            initializer.DropAndRecreateDb();
-        }
-
-        protected void SeedDatabase()
-        {
-            //ServiceClient<IUsersService>().Try(x => x.SeedDB()).Wait();
+            IServiceClient<IDatabaseUtilitiesService> utilities = container.Resolve<IServiceClient<IDatabaseUtilitiesService>>();
+            utilities.Try(x => x.RecreateDb());
         }
     }
 }

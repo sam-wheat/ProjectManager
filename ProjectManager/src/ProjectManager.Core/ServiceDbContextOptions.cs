@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ProjectManager.Core
 {
-    public abstract class ServiceDbContextOptions : IDbContextOptions
+    public class ServiceDbContextOptions : IDbContextOptions
     {
         public DbContextOptions Options { get; private set; }
 

@@ -18,9 +18,9 @@ namespace ProjectManager.API.Controllers
     [Route("api/[controller]")]
     public class UsersController : BaseController, IUsersService
     {
-        private IServiceGateway<IUsersService> usersService;
+        private IServiceClient<IUsersService> usersService;
 
-        public UsersController(IServiceGateway<IUsersService> userService) 
+        public UsersController(IServiceClient<IUsersService> userService) 
         {
             this.usersService = usersService;
         }
