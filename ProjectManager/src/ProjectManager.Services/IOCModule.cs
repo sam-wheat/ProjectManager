@@ -21,8 +21,8 @@ namespace ProjectManager.Services
             builder.RegisterType<DefaultContactsService>().As<IDefaultContactsService>();
             builder.RegisterType<ProjectsService>().As<IProjectsService>();
             builder.RegisterType<RemindersService>().As<IRemindersService>();
-            builder.Register<Func<EndPointType, IUsersService>>(c => { IComponentContext cxt = c.Resolve<IComponentContext>(); return ep => cxt.ResolveKeyed<IUsersService>(ep); });
-            builder.RegisterType<UsersService>().Keyed<IUsersService>(EndPointType.InProcess);
+            //builder.Register<Func<EndPointType, IUsersService>>(c => { IComponentContext cxt = c.Resolve<IComponentContext>(); return ep => cxt.ResolveKeyed<IUsersService>(ep); });
+            //builder.RegisterType<UsersService>().Keyed<IUsersService>(EndPointType.InProcess);
             builder.RegisterType<DatabaseUtilitiesServicecs>().Keyed<IDatabaseUtilitiesService>(EndPointType.InProcess);
         }
     }

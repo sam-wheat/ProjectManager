@@ -10,6 +10,7 @@ using ProjectManager.Core;
 using ProjectManager.Domain;
 using ProjectManager.Model.Domain;
 using ProjectManager.Gateway;
+using ProjectManager.Services;
 
 namespace ProjectManager.Tests
 {
@@ -41,6 +42,8 @@ namespace ProjectManager.Tests
             AutoFacRegistrationHelper registrationHelper = new AutoFacRegistrationHelper(builder);
             registrationHelper.RegisterEndPoints(ConfigManager.EndPoints);
             registrationHelper.RegisterAPI(typeof(IUsersService), APIName.ProjectManager.ToString());
+            registrationHelper.RegisterService<UsersService>().Keyed<IUsersService>(EndPointType.InProcess);
+
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());

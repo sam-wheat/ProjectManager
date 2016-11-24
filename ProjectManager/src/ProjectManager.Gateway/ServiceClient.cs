@@ -9,41 +9,49 @@ namespace ProjectManager.Gateway
 {
     public class ServiceClient<T> : IServiceClient<T> where T : class, IDisposable
     {
-        private ClientResolver<T> resolver;
+        private ILifetimeScope container;
 
-        public ServiceClient(ClientResolver<T> resolver)
+        public ServiceClient(ILifetimeScope container)
         {
-            this.resolver = resolver;
+            this.container = container;
         }
 
         public void Try(Action<T> method)
         {
-            using (T client = resolver.ResolveClient())
+            using (ILifetimeScope scope = container.BeginLifetimeScope())
             {
+                IClientResolver<T> resolver = scope.Resolve<IClientResolver<T>>();
+                T client = resolver.ResolveClient();
                 method(client);
             }
         }
 
         public TResult Try<TResult>(Func<T, TResult> method)
         {
-            using (T client = resolver.ResolveClient())
+            using (ILifetimeScope scope = container.BeginLifetimeScope())
             {
+                IClientResolver<T> resolver = scope.Resolve<IClientResolver<T>>();
+                T client = resolver.ResolveClient();
                 return method(client);
             }
         }
 
         public async Task TryAsync(Func<T, Task> method)
         {
-            using (T client = resolver.ResolveClient())
+            using (ILifetimeScope scope = container.BeginLifetimeScope())
             {
+                IClientResolver<T> resolver = scope.Resolve<IClientResolver<T>>();
+                T client = resolver.ResolveClient();
                 await method(client);
             }
         }
 
         public async Task<TResult> TryAsync<TResult>(Func<T, Task<TResult>> method)
         {
-            using (T client = resolver.ResolveClient())
+            using (ILifetimeScope scope = container.BeginLifetimeScope())
             {
+                IClientResolver<T> resolver = scope.Resolve<IClientResolver<T>>();
+                T client = resolver.ResolveClient();
                 return await method(client);
             }
         }
