@@ -7,24 +7,30 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Options;
 using Autofac;
+using Autofac.Features.OwnedInstances;
 using ProjectManager.Core;
 
 
 namespace ProjectManager.Gateway
 {
-    public class AutoFacClientResolver : IClientResolver
+    public class AutoFacRegistrationHelper : IRegistrationHelper
     {
         private ContainerBuilder builder;
         public IEndPointConfiguration CurrentEndPoint { get; private set; }
         private Dictionary<string, IAPI> EndPointDict;
 
-        public AutoFacClientResolver(ContainerBuilder builder)
+        public AutoFacRegistrationHelper(ContainerBuilder builder)
         {
             if (builder == null)
                 throw new ArgumentNullException("builder");
 
             this.builder = builder;
             EndPointDict = new Dictionary<string, IAPI>();
+            builder.Register<Func<IEndPointConfiguration>>(c => { IComponentContext cxt = c.Resolve<IComponentContext>(); return () => cxt.Resolve<EndPointInstance>().CurrentEndPoint; });
+            builder.Register<Func<Type, IAPI>>(c => { IComponentContext cxt = c.Resolve<IComponentContext>(); return t => cxt.ResolveKeyed<IAPI>(t); });
+            builder.Register<Func<EndPointType, IEndPointValidator>>(c => { IComponentContext cxt = c.Resolve<IComponentContext>(); return ep => cxt.ResolveKeyed<IEndPointValidator>(ep); });
+            builder.RegisterType<EndPointInstance>().InstancePerLifetimeScope();
+            builder.RegisterGeneric(typeof(ClientResolver<>));
         }
 
         public void RegisterEndPoints(IEnumerable<IEndPointConfiguration> endPoints)
@@ -55,39 +61,8 @@ namespace ProjectManager.Gateway
         {
             builder.RegisterInstance<IAPI>(api).Keyed<IAPI>(serviceType);
         }
-        /// <summary>
-        /// Given a service interface (IOrdersService), we find an API (MyStore).
-        /// Given the API, we find an EndPoint.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="container"></param>
-        /// <returns></returns>
-        public virtual T ResolveClient<T>(ILifetimeScope container)
-        {
-            T client = default(T);
-            var typeofT = typeof(T);
 
-            if (!container.IsRegisteredWithKey<IAPI>(typeofT))
-                return client;
 
-            IAPI api = container.ResolveKeyed<IAPI>(typeofT);
-
-            foreach (IEndPointConfiguration endPoint in api.EndPoints)
-            {
-                if (!container.IsRegisteredWithKey<T>(endPoint.EndPointType))
-                    continue;
-
-                CurrentEndPoint = endPoint;
-                client = container.ResolveKeyed<T>(endPoint.EndPointType);
-
-                IEndPointValidator validator = container.ResolveKeyed<IEndPointValidator>(endPoint.EndPointType);
-
-                if (!validator.IsInterfaceAlive(endPoint))
-                    continue;
-
-                break;
-            }
-            return client;
-        }
+       
     }
 }

@@ -32,11 +32,10 @@ namespace ProjectManager.Tests
         protected void BuildContainer()
         {
             ContainerBuilder builder = new ContainerBuilder();
-            ClientResolver clientResolver = new ClientResolver();
+            RegistrationHelper clientResolver = new RegistrationHelper();
             clientResolver.RegisterEndPoints(ConfigManager.EndPoints);
             clientResolver.RegisterAPI(typeof(IUsersService), APIName.ProjectManager.ToString());
             clientResolver.RegisterAPI(typeof(IDatabaseUtilitiesService), APIName.ProjectManager.ToString());
-            builder.RegisterInstance(clientResolver).As<IClientResolver>().SingleInstance();
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());

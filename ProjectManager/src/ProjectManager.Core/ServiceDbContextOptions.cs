@@ -11,8 +11,9 @@ namespace ProjectManager.Core
     {
         public DbContextOptions Options { get; private set; }
 
-        public ServiceDbContextOptions(IEndPointConfiguration endPoint)
+        public ServiceDbContextOptions(Func<IEndPointConfiguration> endPointFactory)
         {
+            IEndPointConfiguration endPoint = endPointFactory();
             Configure(endPoint);
         }
 

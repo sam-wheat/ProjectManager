@@ -3,42 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ProjectManager.Core;
-using Autofac;
 
 namespace ProjectManager.Gateway
 {
-    public class ClientResolver : IClientResolver
+    public class ClientResolver<T> : IClientResolver<T>
     {
-        public IEndPointConfiguration CurrentEndPoint { get; private set; }
-        private Dictionary<Type, IAPI> APIDict;
-        private Dictionary<string, IAPI> EndPointDict;
+        private Func<Type, IAPI> apiFactory;
+        private Func<EndPointType, T> serviceFactory;
+        private Func<EndPointType, IEndPointValidator> validatorFactory;
+        private EndPointInstance endPointInstance;
 
-        public ClientResolver()
+        public ClientResolver(
+            Func<Type, IAPI> apiFactory,
+            Func<EndPointType, T> serviceFactory,
+            Func<EndPointType, IEndPointValidator> validatorFactory,
+            EndPointInstance endPointInstance
+            )
         {
-            APIDict = new Dictionary<Type, IAPI>();
-            EndPointDict = new Dictionary<string, IAPI>();
-        }
-
-        public void RegisterEndPoints(IEnumerable<IEndPointConfiguration> endPoints)
-        {
-            foreach (var api in endPoints.GroupBy(x => x.API_Name))
-                EndPointDict.Add(api.Key, new API(api.Key, api.ToList()));
-        }
-
-        public void RegisterAPI(Type serviceType, string api_name)
-        {
-            IAPI api;
-            EndPointDict.TryGetValue(api_name, out api);
-
-            if (api == null)
-                throw new Exception($"An API named {api_name} was not found.  Call the RegisterEndPoints method before calling RegisterService with an API name. Also check your spelling.");
-
-            RegisterAPI(serviceType, api);
-        }
-
-        public void RegisterAPI(Type serviceType, IAPI api)
-        {
-            APIDict[serviceType] = api;
+            this.apiFactory = apiFactory;
+            this.serviceFactory = serviceFactory;
+            this.validatorFactory = validatorFactory;
+            this.endPointInstance = endPointInstance;
         }
 
         /// <summary>
@@ -46,31 +31,31 @@ namespace ProjectManager.Gateway
         /// Given the API, we find an EndPoint.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="container"></param>
         /// <returns></returns>
-        public virtual T ResolveClient<T>(ILifetimeScope container)
+        public virtual T ResolveClient()
         {
             T client = default(T);
-            var typeofT = typeof(T);
-
-            IAPI api;
-            APIDict.TryGetValue(typeofT, out api); // Get the API that is registered to the client interface we are resolving
+            IAPI api = apiFactory(typeof(T));
 
             if (api == null)
-                return client;  // client is not registered to any API
+                return client;
 
             foreach (IEndPointConfiguration endPoint in api.EndPoints)
             {
-                if(! container.IsRegisteredWithKey<T>(endPoint.EndPointType))
+                // must set CurrentEndPoint before calling serviceFactory
+                endPointInstance.CurrentEndPoint = endPoint;
+
+                client = serviceFactory(endPoint.EndPointType);
+
+                if (client == null)
                     continue;
 
-                CurrentEndPoint = endPoint;
-                client = container.ResolveKeyed<T>(endPoint.EndPointType);
-                IEndPointValidator validator = container.ResolveKeyed<IEndPointValidator>(endPoint.EndPointType);
+                IEndPointValidator validator = validatorFactory(endPoint.EndPointType);
 
                 if (!validator.IsInterfaceAlive(endPoint))
                     continue;
-        
+
+                
                 break;
             }
             return client;

@@ -19,6 +19,7 @@ namespace ProjectManager.Services
         public DbSet<Project> Projects { get; set; }
         public DbSet<Reminder> Reminders { get; set; }
         public DbSet<User> Users { get; set; }
+        public Guid InstanceID = Guid.NewGuid();
 
         internal Db() // required for migrations
         {
