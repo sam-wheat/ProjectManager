@@ -20,7 +20,7 @@ namespace ProjectManager.API.Controllers
     {
         private IServiceClient<IUsersService> usersService;
 
-        public UsersController(IServiceClient<IUsersService> userService) 
+        public UsersController(IServiceClient<IUsersService> usersService) 
         {
             this.usersService = usersService;
         }
@@ -42,7 +42,8 @@ namespace ProjectManager.API.Controllers
         [Route("GetUser")]
         public async Task<IAsyncServiceResult<User>> GetUser(string userName, string password)
         {
-            return await usersService.TryAsync(x => x.GetUser(userName, password));
+            IAsyncServiceResult<User> result = await usersService.TryAsync(x => x.GetUser(userName, password));
+            return result;
         }
 
         [HttpGet]
@@ -54,7 +55,7 @@ namespace ProjectManager.API.Controllers
 
         [HttpPost]
         [Route("SaveUser")]
-        public async Task<IAsyncServiceResult> SaveUser(User user)
+        public async Task<IAsyncServiceResult> SaveUser([FromBody] User user)
         {
             return await usersService.TryAsync(x => x.SaveUser(user));
         }

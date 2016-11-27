@@ -42,19 +42,17 @@ namespace ProjectManager.Gateway
 
             foreach (IEndPointConfiguration endPoint in api.EndPoints)
             {
-                // must set CurrentEndPoint before calling serviceFactory
-                endPointInstance.CurrentEndPoint = endPoint;
-
-                client = serviceFactory(endPoint.EndPointType);
-
-                if (client == null)
-                    continue;
-
                 IEndPointValidator validator = validatorFactory(endPoint.EndPointType);
 
                 if (!validator.IsInterfaceAlive(endPoint))
                     continue;
 
+                // must set CurrentEndPoint before calling serviceFactory
+                endPointInstance.CurrentEndPoint = endPoint;
+                client = serviceFactory(endPoint.EndPointType);
+
+                if (client == null)
+                    continue;
                 
                 break;
             }

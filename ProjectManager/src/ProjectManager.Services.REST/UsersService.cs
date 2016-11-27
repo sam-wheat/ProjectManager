@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net.Http;
+using Newtonsoft.Json;
 using ProjectManager.Model;
 using ProjectManager.Domain;
 using ProjectManager.Core;
@@ -12,7 +14,7 @@ namespace ProjectManager.Services.REST
 {
     public class UsersService : BaseService, IUsersService
     {
-        public UsersService(IEndPointConfiguration endPoint) :base(endPoint)
+        public UsersService(Func<IEndPointConfiguration> endPointFactory) :base(endPointFactory)
         {
 
         }
@@ -29,8 +31,8 @@ namespace ProjectManager.Services.REST
 
         public async Task<IAsyncServiceResult<User>> GetUser(string userName, string password)
         {
-            AsyncResult<User> result = new AsyncResult<User>();
-            result.Data = new User { Name = "Melinda" };
+            string json = await httpClient.GetStringAsync($"users/getuser?userName={userName}&password={password}");
+            AsyncResult<User> result = JsonConvert.DeserializeObject<AsyncResult<User>>(json);
             return result;
         }
 
@@ -41,6 +43,9 @@ namespace ProjectManager.Services.REST
 
         public async Task<IAsyncServiceResult> SaveUser(User user)
         {
+            string json = JsonConvert.SerializeObject(user);
+            StringContent content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+            HttpResponseMessage msg = await httpClient.PostAsync("users/saveuser", content);
             AsyncResult result = new AsyncResult();
             return result;
         }

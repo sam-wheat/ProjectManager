@@ -8,7 +8,6 @@ namespace ProjectManager.Core
     public interface IRegistrationHelper
     {
         void RegisterEndPoints(IEnumerable<IEndPointConfiguration> endPoints);
-        void RegisterAPI(Type serviceType, string api_name);
-        void RegisterAPI(Type serviceType, IAPI api);
+        void RegisterService<TService, TInterface>(EndPointType endPointType, string apiName);     
     }
 }

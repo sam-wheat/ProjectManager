@@ -7,7 +7,7 @@ using Autofac;
 
 namespace ProjectManager.Gateway
 {
-    public class RegistrationHelper : IRegistrationHelper
+    public class RegistrationHelper //: IRegistrationHelper
     {
         private Dictionary<Type, IAPI> APIDict;
         private Dictionary<string, IAPI> EndPointDict;

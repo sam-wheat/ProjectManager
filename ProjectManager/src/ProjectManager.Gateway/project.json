@@ -2,9 +2,9 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "Autofac": "4.2.0",
-    "Microsoft.Extensions.Options": "1.1.0-preview1-final",
-    "NETStandard.Library": "1.6.1-preview1-24530-04",
+    "Autofac": "4.2.1",
+    "Microsoft.Extensions.Options": "1.1.0",
+    "NETStandard.Library": "1.6.1",
     "ProjectManager.Core": "1.0.0-*",
     "ProjectManager.Domain": "1.0.0-*"
   },

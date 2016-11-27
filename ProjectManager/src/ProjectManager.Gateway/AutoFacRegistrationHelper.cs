@@ -13,24 +13,19 @@ using ProjectManager.Core;
 
 namespace ProjectManager.Gateway
 {
-    public class AutoFacRegistrationHelper : IRegistrationHelper
+    public class AutofacRegistrationHelper : IRegistrationHelper
     {
         private ContainerBuilder builder;
-        public IEndPointConfiguration CurrentEndPoint { get; private set; }
         private Dictionary<string, IAPI> EndPointDict;
 
-        public AutoFacRegistrationHelper(ContainerBuilder builder)
+        public AutofacRegistrationHelper(ContainerBuilder builder)
         {
             if (builder == null)
                 throw new ArgumentNullException("builder");
 
             this.builder = builder;
             EndPointDict = new Dictionary<string, IAPI>();
-            builder.Register<Func<IEndPointConfiguration>>(c => { IComponentContext cxt = c.Resolve<IComponentContext>(); return () => cxt.Resolve<EndPointInstance>().CurrentEndPoint; });
-            builder.Register<Func<Type, IAPI>>(c => { IComponentContext cxt = c.Resolve<IComponentContext>(); return t => cxt.ResolveKeyed<IAPI>(t); });
-            builder.Register<Func<EndPointType, IEndPointValidator>>(c => { IComponentContext cxt = c.Resolve<IComponentContext>(); return ep => cxt.ResolveKeyed<IEndPointValidator>(ep); });
-            builder.RegisterType<EndPointInstance>().InstancePerLifetimeScope();
-            builder.RegisterGeneric(typeof(ClientResolver<>)).As(typeof(IClientResolver<>));
+            
         }
 
         public void RegisterEndPoints(IEnumerable<IEndPointConfiguration> endPoints)
@@ -45,7 +40,26 @@ namespace ProjectManager.Gateway
                 EndPointDict.Add(api.Key, new API(api.Key, api.ToList()));
         }
 
-        public void RegisterAPI(Type serviceType, string api_name)
+        /// <summary>
+        /// Registers a service.  Call RegisterEndPoints before calling this method.
+        /// </summary>
+        /// <typeparam name="TService">Type of service i.e. OrdersService</typeparam>
+        /// <typeparam name="TInterface">Interface of service i.e. IOrdersService</typeparam>
+        /// <param name="endPointType">Type of client that will access this service i.e. REST, InProcess, WCF</param>
+        /// <param name="apiName">Name of API that is composed by this service i.e. MyStore</param>
+        public void RegisterService<TService, TInterface>(EndPointType endPointType, string apiName)
+        {
+            RegisterAPI(typeof(TInterface), apiName);
+            builder.RegisterType<TService>().Keyed<TInterface>(endPointType);
+            builder.Register<Func<EndPointType, TInterface>>(c => { IComponentContext cxt = c.Resolve<IComponentContext>(); return ep => cxt.ResolveKeyed<TInterface>(ep); });
+        }
+
+        /// <summary>
+        /// Register API by name using service interface as key.  This method finds an instance of the API and calles RegisterAPI using that instance.
+        /// </summary>
+        /// <param name="serviceInterface"></param>
+        /// <param name="api_name"></param>
+        private void RegisterAPI(Type serviceInterface, string api_name)
         {
             IAPI api;
             EndPointDict.TryGetValue(api_name, out api);
@@ -53,33 +67,7 @@ namespace ProjectManager.Gateway
             if (api == null)
                 throw new Exception($"An API named {api_name} was not found.  Call the RegisterEndPoints method before calling RegisterService with an API name. Also check your spelling.");
 
-            RegisterAPI(serviceType, api);
-        }
-
-        public void RegisterAPI(Type serviceType, IAPI api)
-        {
-            builder.RegisterInstance<IAPI>(api).Keyed<IAPI>(serviceType);
-        }
-
-        public AutoFacServiceRegistrationHelper<TService> RegisterService<TService>()
-        {
-            return new AutoFacServiceRegistrationHelper<TService>(builder);
-        }
-    }
-
-    public class AutoFacServiceRegistrationHelper<TService>
-    {
-        private ContainerBuilder builder;
-
-        public AutoFacServiceRegistrationHelper(ContainerBuilder builder)
-        {
-            this.builder = builder;
-        }
-
-        public void Keyed<TInterface>(EndPointType endPointType)
-        {
-            builder.RegisterType<TService>().Keyed<TInterface>(endPointType);
-            builder.Register<Func<EndPointType, TInterface>>(c => { IComponentContext cxt = c.Resolve<IComponentContext>(); return ep => cxt.ResolveKeyed<TInterface>(ep); });
+            builder.RegisterInstance<IAPI>(api).Keyed<IAPI>(serviceInterface);
         }
     }
 }

@@ -25,17 +25,16 @@ namespace ProjectManager.Tests
         {
             // https://weblog.west-wind.com/posts/2016/may/23/strongly-typed-configuration-settings-in-aspnet-core
             Configuration = ConfigManager.GetConfigurationRoot();
-            //BuildContainer();
-            //InitializeDatabase();
+            BuildContainer();
+            InitializeDatabase();
         }
 
         protected void BuildContainer()
         {
             ContainerBuilder builder = new ContainerBuilder();
-            RegistrationHelper clientResolver = new RegistrationHelper();
-            clientResolver.RegisterEndPoints(ConfigManager.EndPoints);
-            clientResolver.RegisterAPI(typeof(IUsersService), APIName.ProjectManager.ToString());
-            clientResolver.RegisterAPI(typeof(IDatabaseUtilitiesService), APIName.ProjectManager.ToString());
+            AutofacRegistrationHelper registrationHelper = new AutofacRegistrationHelper(builder);
+            registrationHelper.RegisterEndPoints(ConfigManager.EndPoints);
+            registrationHelper.RegisterService<DatabaseUtilitiesServicecs, IDatabaseUtilitiesService>(EndPointType.InProcess, APIName.ProjectManager.ToString());
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());

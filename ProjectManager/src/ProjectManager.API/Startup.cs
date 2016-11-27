@@ -14,7 +14,8 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using ProjectManager.Core;
 using ProjectManager.Domain;
-
+using ProjectManager.Gateway;
+using ProjectManager.Services;
 
 namespace ProjectManager.API
 {
@@ -48,7 +49,6 @@ namespace ProjectManager.API
                 options.OutputFormatters.Insert(0, formatter);
             });
             services.Configure<List<EndPointConfiguration>>(Configuration.GetSection("EndPointConfigurations"));
-            List<EndPointConfiguration> templates = ConfigurationBinder.Bind<List<EndPointConfiguration>>(Configuration.GetSection("EndPointConfigurations"));
 
             // Autofac
             var builder = new ContainerBuilder();
@@ -56,12 +56,15 @@ namespace ProjectManager.API
             builder.RegisterModule(new ProjectManager.Services.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.Populate(services);
+            AutofacRegistrationHelper registrationHelper = new AutofacRegistrationHelper(builder);
+            registrationHelper.RegisterEndPoints(ConfigManager.EndPoints);
+            registrationHelper.RegisterService<UsersService, IUsersService>(EndPointType.InProcess, APIName.ProjectManager.ToString());
+            registrationHelper.RegisterService<DatabaseUtilitiesServicecs, IDatabaseUtilitiesService>(EndPointType.InProcess, APIName.ProjectManager.ToString());
             var container = builder.Build();
-            IEndPointConfiguration conn = container.Resolve<IEndPointConfiguration>();
-            conn.ConnectionString = ConfigManager.ConnectionString;
 
             // Make sure the database exists
-            container.Resolve<IDatabaseUtilitiesService>().CreateOrUpdateDatabase();
+            //IServiceClient<IDatabaseUtilitiesService> utilities = container.Resolve<IServiceClient<IDatabaseUtilitiesService>>();
+            //utilities.Try(x => x.RecreateDb());
 
             return container.Resolve<IServiceProvider>();
         }

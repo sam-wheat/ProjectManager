@@ -77,11 +77,14 @@ namespace ProjectManager.Core
             ConnectionStringName = config["Config:CurrentConnectionString"];
             ConnectionString = (config["ConnectionStrings:" + ConnectionStringName]).Replace("{DataDirectory}", AppDataDir);
             EndPoints = new List<IEndPointConfiguration>();
-            IEnumerable<EndPointConfiguration> endPoints = ConfigurationBinder.Bind<List<EndPointConfiguration>>(config.GetSection("EndPointConfigurations"))
-                .Where(x => x.IsActive);
+            List<EndPointConfiguration> endPoints = new List<EndPointConfiguration>();
+            config.GetSection("EndPointConfigurations").Bind(endPoints);
+
 
             if (endPoints == null)
                 return;
+            else
+                endPoints = endPoints.Where(x => x.IsActive).ToList();
 
             if (endPoints.Any(x => string.IsNullOrEmpty(x.Name)))
                 throw new Exception("One or more EndPointConfigurations has a blank name.  Name is required for all EndPointConfigurations");
