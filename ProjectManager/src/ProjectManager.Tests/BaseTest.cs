@@ -34,7 +34,6 @@ namespace ProjectManager.Tests
             ContainerBuilder builder = new ContainerBuilder();
             AutofacRegistrationHelper registrationHelper = new AutofacRegistrationHelper(builder);
             registrationHelper.RegisterEndPoints(ConfigManager.EndPoints);
-            registrationHelper.RegisterService<DatabaseUtilitiesServicecs, IDatabaseUtilitiesService>(EndPointType.InProcess, APIName.ProjectManager.ToString());
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());
@@ -45,8 +44,10 @@ namespace ProjectManager.Tests
 
         protected void InitializeDatabase()
         {
-            IServiceClient<IDatabaseUtilitiesService> utilities = container.Resolve<IServiceClient<IDatabaseUtilitiesService>>();
-            utilities.Try(x => x.RecreateDb());
+            ServiceDbContextOptions options = new ServiceDbContextOptions(() => ConfigManager.EndPoints.Single(y => y.Name == "Horrible_SQL"));
+            Db db = new Db(options);
+            DatabaseUtilitiesService svc = new DatabaseUtilitiesService(db);
+            svc.RecreateDb();
         }
     }
 }

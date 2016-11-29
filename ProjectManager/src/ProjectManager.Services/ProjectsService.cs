@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjectManager.Model.Domain;
 using ProjectManager.Model.Presentation;
 using ProjectManager.Domain;
+using ProjectManager.Core;
 
 namespace ProjectManager.Services
 {
@@ -16,11 +17,14 @@ namespace ProjectManager.Services
         private IRemindersService RemindersService;
         private IDefaultContactsService DefaultContactsService;
 
-        public ProjectsService(Db db, IActivitiesService actvitiesService, IRemindersService remindersService, IDefaultContactsService defaultContactsService) : base(db)
+        public ProjectsService(Db db, 
+            IClientResolver<IActivitiesService> actvitiesServiceFactory, 
+            IClientResolver<IRemindersService> remindersServiceFactory, 
+            IClientResolver<IDefaultContactsService> defaultContactsServiceFactory) : base(db)
         {
-            ActivitiesService = actvitiesService;
-            RemindersService = remindersService;
-            DefaultContactsService = defaultContactsService;
+            ActivitiesService = actvitiesServiceFactory.ResolveClient();
+            RemindersService = remindersServiceFactory.ResolveClient();
+            DefaultContactsService = defaultContactsServiceFactory.ResolveClient();
         }
 
         private bool ValidateProjectHeader(Project project, out string errorMsg)

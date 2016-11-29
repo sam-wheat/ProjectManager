@@ -55,7 +55,7 @@ namespace ProjectManager.Gateway
         }
 
         /// <summary>
-        /// Register API by name using service interface as key.  This method finds an instance of the API and calles RegisterAPI using that instance.
+        /// Register API by name using service interface as key.  This method finds an instance of the API and calls RegisterAPI using that instance.
         /// </summary>
         /// <param name="serviceInterface"></param>
         /// <param name="api_name"></param>

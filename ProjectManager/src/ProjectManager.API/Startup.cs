@@ -58,8 +58,8 @@ namespace ProjectManager.API
             builder.Populate(services);
             AutofacRegistrationHelper registrationHelper = new AutofacRegistrationHelper(builder);
             registrationHelper.RegisterEndPoints(ConfigManager.EndPoints);
-            registrationHelper.RegisterService<UsersService, IUsersService>(EndPointType.InProcess, APIName.ProjectManager.ToString());
-            registrationHelper.RegisterService<DatabaseUtilitiesServicecs, IDatabaseUtilitiesService>(EndPointType.InProcess, APIName.ProjectManager.ToString());
+            new Services.ServiceRegistry(registrationHelper).Register();
+            new Services.REST.ServiceRegistry(registrationHelper).Register();
             var container = builder.Build();
 
             // Make sure the database exists

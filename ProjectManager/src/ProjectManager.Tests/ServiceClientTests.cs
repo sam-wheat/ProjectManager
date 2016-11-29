@@ -28,7 +28,8 @@ namespace ProjectManager.Tests
             ContainerBuilder builder = new ContainerBuilder();
             AutofacRegistrationHelper registrationHelper = new AutofacRegistrationHelper(builder);
             registrationHelper.RegisterEndPoints(ConfigManager.EndPoints);
-            registrationHelper.RegisterService<ProjectManager.Services.UsersService, IUsersService>(EndPointType.InProcess, APIName.ProjectManager.ToString());
+            new Services.ServiceRegistry(registrationHelper).Register();
+            new Services.REST.ServiceRegistry(registrationHelper).Register();
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());
@@ -55,8 +56,8 @@ namespace ProjectManager.Tests
             ContainerBuilder builder = new ContainerBuilder();
             AutofacRegistrationHelper registrationHelper = new AutofacRegistrationHelper(builder);
             registrationHelper.RegisterEndPoints(ConfigManager.EndPoints);
-            registrationHelper.RegisterService<ProjectManager.Services.UsersService, IUsersService>(EndPointType.InProcess, APIName.ProjectManager.ToString());
-            registrationHelper.RegisterService<ProjectManager.Services.REST.UsersService, IUsersService>(EndPointType.REST, APIName.ProjectManager.ToString());
+            new Services.ServiceRegistry(registrationHelper).Register();
+            new Services.REST.ServiceRegistry(registrationHelper).Register();
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());
@@ -84,8 +85,8 @@ namespace ProjectManager.Tests
             ContainerBuilder builder = new ContainerBuilder();
             AutofacRegistrationHelper registrationHelper = new AutofacRegistrationHelper(builder);
             registrationHelper.RegisterEndPoints(ConfigManager.EndPoints);
-            registrationHelper.RegisterService<ProjectManager.Services.UsersService, IUsersService>(EndPointType.InProcess, APIName.ProjectManager.ToString());
-            registrationHelper.RegisterService<ProjectManager.Services.REST.UsersService, IUsersService>(EndPointType.REST, APIName.ProjectManager.ToString());
+            new Services.ServiceRegistry(registrationHelper).Register();
+            new Services.REST.ServiceRegistry(registrationHelper).Register();
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());

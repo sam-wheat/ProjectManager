@@ -8,10 +8,10 @@ using ProjectManager.Domain;
 
 namespace ProjectManager.Services
 {
-    public class DatabaseUtilitiesServicecs : BaseService, IDatabaseUtilitiesService
+    public class DatabaseUtilitiesService : BaseService, IDatabaseUtilitiesService
     {
 
-        public DatabaseUtilitiesServicecs(Db db) : base(db)
+        public DatabaseUtilitiesService(Db db) : base(db)
         {
 
         }

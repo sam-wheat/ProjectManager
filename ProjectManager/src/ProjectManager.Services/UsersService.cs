@@ -17,10 +17,10 @@ namespace ProjectManager.Services
         private IContactsService ContactsService;
         private IProjectsService ProjectsService;
 
-        public UsersService(Db db, IProjectsService projectsService, IContactsService contactsService) : base(db)
+        public UsersService(Db db, IClientResolver<IContactsService> contactsServiceFactory, IClientResolver<IProjectsService> projectsServiceFactory) : base(db)
         {
-            ContactsService = contactsService;
-            ProjectsService = projectsService;
+            ContactsService = contactsServiceFactory.ResolveClient();
+            ProjectsService = projectsServiceFactory.ResolveClient();
         }
 
         public async Task<IAsyncServiceResult<User>> GetUser(string userName, string password)

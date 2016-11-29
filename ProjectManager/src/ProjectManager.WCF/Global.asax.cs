@@ -4,6 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
+using Autofac;
+
+// http://docs.autofac.org/en/latest/integration/wcf.html
 
 namespace ProjectManager.WCF
 {
@@ -12,7 +15,7 @@ namespace ProjectManager.WCF
 
         protected void Application_Start(object sender, EventArgs e)
         {
-            //HttpContext.Current.Session[]
+
         }
 
         protected void Session_Start(object sender, EventArgs e)

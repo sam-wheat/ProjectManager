@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjectManager.Model.Domain;
 using ProjectManager.Model.Presentation;
 using ProjectManager.Domain;
+using ProjectManager.Core;
 
 namespace ProjectManager.Services
 {
@@ -14,9 +15,9 @@ namespace ProjectManager.Services
     {
         private IDefaultContactsService defaultContactsService;
 
-        public ContactsService(Db db, IDefaultContactsService defaultContactsService) : base(db)
+        public ContactsService(Db db, IClientResolver<IDefaultContactsService> defaultContactsServiceFactory) : base(db)
         {
-            this.defaultContactsService = defaultContactsService;
+            this.defaultContactsService = defaultContactsServiceFactory.ResolveClient();
         }
 
         private void attachContact(Contact contact)

@@ -57,7 +57,16 @@ namespace ProjectManager.API.Controllers
         [Route("SaveUser")]
         public async Task<IAsyncServiceResult> SaveUser([FromBody] User user)
         {
-            return await usersService.TryAsync(x => x.SaveUser(user));
+            IAsyncServiceResult result = null;
+            try
+            {
+                result = await usersService.TryAsync(x => x.SaveUser(user));
+            }
+            catch (Exception ex)
+            {
+                string y = ex.Message;
+            }
+            return result;
         }
 
         [HttpGet]
