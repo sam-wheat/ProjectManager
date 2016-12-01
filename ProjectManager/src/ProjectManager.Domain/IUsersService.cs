@@ -10,6 +10,7 @@ using ProjectManager.Model.Presentation;
 
 namespace ProjectManager.Domain
 {
+    [ServiceContract]
     public interface IUsersService : IDisposable
     {
         [OperationContract]

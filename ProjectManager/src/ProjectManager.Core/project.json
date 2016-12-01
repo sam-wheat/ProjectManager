@@ -18,6 +18,7 @@
     "System.Net.NetworkInformation": "4.3.0"
   },
   "frameworks": {
+    "net462": {},
     "netstandard1.6": {
       "imports": [ "dnxcore50" ]
     }

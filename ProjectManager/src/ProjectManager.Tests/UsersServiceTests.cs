@@ -47,7 +47,6 @@ namespace ProjectManager.Tests
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.REST.IOCModule());
-            builder.RegisterModule(new Tests.IOCModule());
             IContainer container = builder.Build();
             IServiceClient<IUsersService> usersService = container.Resolve<IServiceClient<IUsersService>>();
             IAsyncServiceResult result = usersService.TryAsync(x => x.SaveUser(new User { Name = "User 1", Password = "x", IsActive = true })).Result;

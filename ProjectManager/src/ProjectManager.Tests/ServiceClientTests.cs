@@ -34,7 +34,6 @@ namespace ProjectManager.Tests
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.REST.IOCModule());
-            builder.RegisterModule(new Tests.IOCModule());
             builder.RegisterInstance(networkUtilitiesMoq).As<INetworkUtilities>();
             IContainer container = builder.Build();
 
@@ -62,7 +61,6 @@ namespace ProjectManager.Tests
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.REST.IOCModule());
-            builder.RegisterModule(new Tests.IOCModule());
             builder.RegisterInstance(networkUtilitiesMoq).As<INetworkUtilities>();
             IContainer container = builder.Build();
 
@@ -79,7 +77,7 @@ namespace ProjectManager.Tests
         {
             Mock<INetworkUtilities> mock = new Mock<INetworkUtilities>();
             mock.Setup(x => x.VerifyDBServerConnectivity(It.IsAny<string>())).Returns(false);
-            mock.Setup(x => x.VerifyHttpServerAvailability(It.Is<string>(c => c == ""))).Returns(true);
+            mock.Setup(x => x.VerifyHttpServerAvailability(It.Is<string>(c => c == "http://localhost:62136/UsersService.svc"))).Returns(true);
             INetworkUtilities networkUtilitiesMoq = mock.Object;
 
             ContainerBuilder builder = new ContainerBuilder();
@@ -87,15 +85,18 @@ namespace ProjectManager.Tests
             registrationHelper.RegisterEndPoints(ConfigManager.EndPoints);
             new Services.ServiceRegistry(registrationHelper).Register();
             new Services.REST.ServiceRegistry(registrationHelper).Register();
+            registrationHelper.RegisterWCFService<IUsersService>(ConfigManager.EndPoints.First(x => x.EndPointType == EndPointType.WCF), APIName.ProjectManager.ToString());
+
+
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.REST.IOCModule());
-            builder.RegisterModule(new Tests.IOCModule());
             builder.RegisterInstance(networkUtilitiesMoq).As<INetworkUtilities>();
             IContainer container = builder.Build();
 
             IServiceClient<IUsersService> usersService = container.Resolve<IServiceClient<IUsersService>>();
+            int z = usersService.Try(x => x.DeleteUserByID(1));
             IAsyncServiceResult result = usersService.TryAsync(x => x.SaveUser(new User { Name = "User 1", Password = "x", IsActive = true })).Result;
             IAsyncServiceResult<User> userResult = usersService.TryAsync(x => x.GetUser("User 1", "x")).Result;
             Assert.IsNotNull(userResult.Data);

@@ -6,12 +6,23 @@
     "Microsoft.Extensions.Options": "1.1.0",
     "NETStandard.Library": "1.6.1",
     "ProjectManager.Core": "1.0.0-*",
-    "ProjectManager.Domain": "1.0.0-*"
+    "ProjectManager.Domain": "1.0.0-*",
+    "System.ServiceModel": "1.0.0",
+    "System.ServiceModel.Http": "4.3.0",
+    "System.ServiceModel.NetTcp": "4.3.0",
+    "System.ServiceModel.Primitives": "4.3.0",
+    "System.ServiceModel.Security": "4.3.0"
   },
 
   "frameworks": {
+    "net462": {
+      "dependencies": {
+      }
+    },
     "netstandard1.6": {
-      "imports": "dnxcore50"
+      "imports": [
+        "dnxcore50"        
+      ]
     }
   }
 }

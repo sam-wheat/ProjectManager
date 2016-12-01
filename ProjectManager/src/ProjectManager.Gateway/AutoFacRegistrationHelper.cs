@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Options;
 using Autofac;
 using Autofac.Features.OwnedInstances;
+//using Autofac.Integration.Wcf;
 using ProjectManager.Core;
 
 
@@ -49,8 +51,37 @@ namespace ProjectManager.Gateway
         /// <param name="apiName">Name of API that is composed by this service i.e. MyStore</param>
         public void RegisterService<TService, TInterface>(EndPointType endPointType, string apiName)
         {
+            if (endPointType == EndPointType.WCF)
+                throw new Exception("Call RegisterWCFService for WCF type endpoints.");
+
             RegisterAPI(typeof(TInterface), apiName);
             builder.RegisterType<TService>().Keyed<TInterface>(endPointType);
+            builder.Register<Func<EndPointType, TInterface>>(c => { IComponentContext cxt = c.Resolve<IComponentContext>(); return ep => cxt.ResolveKeyed<TInterface>(ep); });
+        }
+
+        public void RegisterWCFService<TInterface>(IEndPointConfiguration endPoint, string apiName)
+        {
+            // http://docs.autofac.org/en/latest/integration/wcf.html
+            // http://microsoftintegration.guru/2014/11/17/part-3-api-gateway-worked-went-wrong/
+
+            if (endPoint.EndPointType != EndPointType.WCF)
+                throw new Exception("Only WCF EndPoints can be registered with this method.  Try RegisterService instead.");
+
+            RegisterAPI(typeof(TInterface), apiName);
+
+            builder.Register(c => 
+            {
+                IComponentContext cxt = c.Resolve<IComponentContext>();
+                Func<IEndPointConfiguration> epfactory = cxt.Resolve<Func<IEndPointConfiguration>>();
+                IEndPointConfiguration ep = epfactory();
+
+                return new ChannelFactory<TInterface>(
+                    new BasicHttpBinding(),
+                    new EndpointAddress(ep.ConnectionString)
+                    );
+            });
+
+            builder.Register(c => c.Resolve<ChannelFactory<TInterface>>().CreateChannel()).Keyed<TInterface>(endPoint.EndPointType);
             builder.Register<Func<EndPointType, TInterface>>(c => { IComponentContext cxt = c.Resolve<IComponentContext>(); return ep => cxt.ResolveKeyed<TInterface>(ep); });
         }
 
