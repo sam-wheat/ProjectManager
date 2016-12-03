@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "NETStandard.Library": "1.6.1",
+    "ProjectManager.Core": "1.0.0-*",
+    "ProjectManager.Domain": "1.0.0-*",
+    "ProjectManager.Gateway": "1.0.0-*",
+    "ProjectManager.Model": "1.0.0-*",
+    "ProjectManager.Services": "1.0.0-*",
+    "ProjectManager.Services.REST": "1.0.0-*",
+    "System.ServiceModel": "1.0.0",
+    "System.ServiceModel.Http": "4.3.0",
+    "System.ServiceModel.NetTcp": "4.3.0",
+    "System.ServiceModel.Primitives": "4.3.0",
+    "System.ServiceModel.Security": "4.3.0"
+  },
+
+  "frameworks": {
+    "net462": {},
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  }
+}

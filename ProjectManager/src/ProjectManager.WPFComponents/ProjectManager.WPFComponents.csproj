@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ProjectManager.WPFComponents</RootNamespace>
     <AssemblyName>ProjectManager.WPFComponents</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -61,7 +62,7 @@
       <HintPath>..\ProjectManager.Model\bin\Debug\netstandard1.6\ProjectManager.Model.dll</HintPath>
     </Reference>
     <Reference Include="ProjectManager.Services">
-      <HintPath>..\ProjectManager.Services\bin\Debug\netcoreapp1.1\ProjectManager.Services.dll</HintPath>
+      <HintPath>..\ProjectManager.Services\bin\Debug\net462\ProjectManager.Services.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

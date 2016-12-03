@@ -27,8 +27,7 @@ namespace ProjectManager.WCF
             registrationHelper.RegisterEndPoints(CreateEndPoints());
             new ProjectManager.Services.ServiceRegistry(registrationHelper).Register();
             new Services.REST.ServiceRegistry(registrationHelper).Register();
-
-            //new ServiceRegistry(registrationHelper).Register();
+            new ServiceRegistry(registrationHelper).Register();
             builder.RegisterType<UsersService>();
 
 

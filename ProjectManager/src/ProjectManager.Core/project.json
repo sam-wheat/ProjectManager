@@ -2,9 +2,6 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "NLog": "5.0.0-beta03",
-    "System.Security.Principal": "4.3.0",
-    "System.Security.Principal.Windows": "4.3.0",
     "Autofac": "4.2.1",
     "Microsoft.EntityFrameworkCore": "1.1.0",
     "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0",
@@ -14,8 +11,11 @@
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
     "Microsoft.Extensions.PlatformAbstractions": "1.1.0",
     "NETStandard.Library": "1.6.1",
+    "NLog": "5.0.0-beta03",
     "System.Data.SqlClient": "4.3.0",
-    "System.Net.NetworkInformation": "4.3.0"
+    "System.Net.NetworkInformation": "4.3.0",
+    "System.Security.Principal": "4.3.0",
+    "System.Security.Principal.Windows": "4.3.0"
   },
   "frameworks": {
     "net462": {},

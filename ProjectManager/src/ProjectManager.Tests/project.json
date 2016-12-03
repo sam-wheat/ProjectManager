@@ -14,7 +14,8 @@
     "Microsoft.NETCore.App": "1.1.0",
     "Autofac": "4.2.1",
     "Microsoft.Extensions.PlatformAbstractions": "1.1.0",
-    "NETStandard.Library": "1.6.1"
+    "NETStandard.Library": "1.6.1",
+    "ProjectManager.Services.WCF": "1.0.0-*"
   },
   "runtimes": {
     "win10-x64": {}
