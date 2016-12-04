@@ -12,11 +12,11 @@ namespace ProjectManager.Services.WCF
 {
     public class UsersService :BaseService, IUsersService
     {
+        // http://stackoverflow.com/questions/4095247/async-ctp-how-can-i-use-async-await-to-call-a-wcf-service/10020063#10020063
+
         private IUsersService channel;
         public UsersService( Func<string, ChannelFactory<IUsersService>> channelFactory)
         {
-            string z = System.IO.Path.Combine("http://localhost:62136/", "//zzz");
-
             channel = channelFactory("UsersService.svc").CreateChannel();
         }
 

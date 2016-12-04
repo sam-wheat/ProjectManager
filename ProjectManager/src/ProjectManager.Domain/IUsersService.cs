@@ -14,19 +14,28 @@ namespace ProjectManager.Domain
     public interface IUsersService : IDisposable
     {
         [OperationContract]
+        [ServiceKnownType(typeof(AsyncResult<User>))]
         Task<IAsyncServiceResult<User>> GetUser(string userName, string password);
+
         [OperationContract]
+        [ServiceKnownType(typeof(AsyncResult))]
         Task<IAsyncServiceResult> SaveUser(User user);
+
         [OperationContract]
         bool ValidateUser(User user, out string errorMsg);
+
         [OperationContract]
         int DeleteUser(User user);
+
         [OperationContract]
         int DeleteUserByID(int userID);
+
         [OperationContract]
         User[] GetUsers(bool activeOnly = true);
+
         [OperationContract]
         PresUser[] SearchUsers(int pageIndex, int pageSize, string sortKey, string sortDir, out int totalResultCount);
+
         [OperationContract]
         bool VerifyLogin(int userID, string password);
     }

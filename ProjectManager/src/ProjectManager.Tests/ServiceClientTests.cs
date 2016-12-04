@@ -89,8 +89,6 @@ namespace ProjectManager.Tests
             new Services.ServiceRegistry(registrationHelper).Register();
             new Services.REST.ServiceRegistry(registrationHelper).Register();
             new Services.WCF.ServiceRegistry(registrationHelper).Register();
-            //registrationHelper.RegisterWCFService<IUsersService>(ConfigManager.EndPoints.First(x => x.EndPointType == EndPointType.WCF), APIName.ProjectManager.ToString());
-
 
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
@@ -105,5 +103,7 @@ namespace ProjectManager.Tests
             Assert.IsNotNull(userResult.Data);
             Assert.AreEqual("User 1", userResult.Data.Name);
         }
+
+        
     }
 }

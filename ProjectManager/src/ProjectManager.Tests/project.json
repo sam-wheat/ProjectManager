@@ -1,6 +1,5 @@
 {
   "version": "1.0.0-*",
-
   "dependencies": {
     "ProjectManager.Core": "1.0.0-*",
     "ProjectManager.Domain": "1.0.0-*",
@@ -11,7 +10,6 @@
     "NUnit": "3.5.0",
     "dotnet-test-nunit": "3.4.0-beta-3",
     "Moq": "4.6.38-alpha",
-    "Microsoft.NETCore.App": "1.1.0",
     "Autofac": "4.2.1",
     "Microsoft.Extensions.PlatformAbstractions": "1.1.0",
     "NETStandard.Library": "1.6.1",
@@ -27,9 +25,21 @@
         "portable-net45+win8"
       ],
       "dependencies": {
+        "Microsoft.NETCore.App": "1.1.0",
+        "System.ServiceModel.Duplex": "4.3.0",
+        "System.ServiceModel.Http": "4.3.0",
+        "System.ServiceModel.NetTcp": "4.3.0",
+        "System.ServiceModel.Security": "4.3.0",
+        "System.Xml.XmlSerializer": "4.3.0"
+      }
+    },
+    "net462": {
+      "frameworkAssemblies": {
+        "System.Runtime.Serialization": "4.0.0.0",
+        "System.ServiceModel": "4.0.0.0",
+        "System.Xml": "4.0.0.0"
       }
     }
-  }
-  ,
+  },
   "testRunner": "nunit"
 }

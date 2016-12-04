@@ -11,6 +11,8 @@ namespace ProjectManager.WPFClient
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
+            builder.RegisterType<MainWindow>().AsSelf();
+            builder.RegisterType<MainWindowViewModel>().AsSelf();
         }
     }
 }

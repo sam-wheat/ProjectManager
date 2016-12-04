@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.ServiceModel;
 using ProjectManager.Core;
 using ProjectManager.Domain;
 using ProjectManager.Model.Domain;
@@ -44,6 +45,7 @@ namespace ProjectManager.WCF
             throw new NotImplementedException();
         }
 
+        
         public async Task<IAsyncServiceResult> SaveUser(User user)
         {
             return await usersService.SaveUser(user);

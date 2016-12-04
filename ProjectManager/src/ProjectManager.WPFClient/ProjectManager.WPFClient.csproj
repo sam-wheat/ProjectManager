@@ -35,13 +35,34 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>ProjectManager.WPFClient.App</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=4.2.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Autofac.4.2.1\lib\net45\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ProjectManager.Core">
-      <HintPath>..\ProjectManager.Core\bin\Debug\netstandard1.6\ProjectManager.Core.dll</HintPath>
+      <HintPath>..\ProjectManager.Core\bin\Debug\net462\ProjectManager.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="ProjectManager.Domain">
+      <HintPath>..\ProjectManager.Domain\bin\Debug\net462\ProjectManager.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="ProjectManager.Gateway">
+      <HintPath>..\ProjectManager.Gateway\bin\Debug\net462\ProjectManager.Gateway.dll</HintPath>
+    </Reference>
+    <Reference Include="ProjectManager.Model">
+      <HintPath>..\ProjectManager.Model\bin\Debug\net462\ProjectManager.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="ProjectManager.Services">
+      <HintPath>..\ProjectManager.Services\bin\Debug\net462\ProjectManager.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="ProjectManager.Services.REST">
+      <HintPath>..\ProjectManager.Services.REST\bin\Debug\net462\ProjectManager.Services.REST.dll</HintPath>
+    </Reference>
+    <Reference Include="ProjectManager.Services.WCF">
+      <HintPath>..\ProjectManager.Services.WCF\bin\Debug\net462\ProjectManager.Services.WCF.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -78,6 +99,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
