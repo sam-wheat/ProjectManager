@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.AspNetCore.Hosting;
 using Autofac;
 using ProjectManager.Core;
 using ProjectManager.Domain;
@@ -14,19 +16,19 @@ using ProjectManager.Gateway;
 
 namespace ProjectManager.Tests
 {
-    // This project can output the Class library as a NuGet Package.
-    // To enable this option, right-click on the project and select the Properties menu item. In the Build tab select "Produce outputs on build".
     public class BaseTest
     {
         protected IContainer container { get; private set; }
         protected IConfiguration Configuration { get; set; }
-
+        protected TestServer API_Server;
+        protected TestServer WCF_Server;
+        
         public BaseTest()
         {
-            // https://weblog.west-wind.com/posts/2016/may/23/strongly-typed-configuration-settings-in-aspnet-core
             Configuration = ConfigManager.GetConfigurationRoot();
             BuildContainer();
             InitializeDatabase();
+           // API_Server = new TestServer(new WebHostBuilder().UseStartup<ProjectManager.API.Startup>());
         }
 
         protected void BuildContainer()

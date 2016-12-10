@@ -18,16 +18,16 @@ namespace ProjectManager.Services
 
         public void Register()
         {
-            string apiName = APIName.ProjectManager.ToString();
+            string epcName = EndPointCollectionName.ProjectManager.ToString();
             EndPointType endPointType = EndPointType.InProcess;
 
-            registrationHelper.RegisterService<UsersService, IUsersService>(endPointType, apiName);
-            registrationHelper.RegisterService<ProjectsService, IProjectsService>(endPointType, apiName);
-            registrationHelper.RegisterService<ContactsService, IContactsService>(endPointType, apiName);
-            registrationHelper.RegisterService<ActivitiesService, IActivitiesService>(endPointType, apiName);
-            registrationHelper.RegisterService<DatabaseUtilitiesService, IDatabaseUtilitiesService>(endPointType, apiName);
-            registrationHelper.RegisterService<DefaultContactsService, IDefaultContactsService>(endPointType, apiName);
-            registrationHelper.RegisterService<RemindersService, IRemindersService>(endPointType, apiName);
+            registrationHelper.RegisterService<UsersService, IUsersService>(endPointType, epcName);
+            registrationHelper.RegisterService<ProjectsService, IProjectsService>(endPointType, epcName);
+            registrationHelper.RegisterService<ContactsService, IContactsService>(endPointType, epcName);
+            registrationHelper.RegisterService<ActivitiesService, IActivitiesService>(endPointType, epcName);
+            registrationHelper.RegisterService<DatabaseUtilitiesService, IDatabaseUtilitiesService>(endPointType, epcName);
+            registrationHelper.RegisterService<DefaultContactsService, IDefaultContactsService>(endPointType, epcName);
+            registrationHelper.RegisterService<RemindersService, IRemindersService>(endPointType, epcName);
         }
     }
 }

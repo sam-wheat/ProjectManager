@@ -6,17 +6,17 @@ using ProjectManager.Core;
 
 namespace ProjectManager.Gateway
 {
-    public class API : IAPI
+    public class EndPointCollection : IEndPointCollection
     {
-        public string API_Name { get { return _api_name; } }
+        public string Collection_Name { get { return collection_name; } }
         public IList<IEndPointConfiguration> EndPoints { get { return _endPoints; } }
 
-        private string _api_name;
+        private string collection_name;
         private IList<IEndPointConfiguration> _endPoints;
 
-        public API(string api_name, IList<IEndPointConfiguration> endPoints)
+        public EndPointCollection(string collection_name, IList<IEndPointConfiguration> endPoints)
         {
-            _api_name = api_name;
+            this.collection_name = collection_name;
             _endPoints = endPoints.OrderBy(x => x.Preference).ToList();
         }
     }

@@ -41,7 +41,7 @@ namespace ProjectManager.Tests
             ContainerBuilder builder = new ContainerBuilder();
             AutofacRegistrationHelper registrationHelper = new AutofacRegistrationHelper(builder);
             registrationHelper.RegisterEndPoints(ConfigManager.EndPoints);
-            registrationHelper.RegisterService<UsersService, IUsersService>(EndPointType.InProcess, APIName.ProjectManager.ToString());
+            registrationHelper.RegisterService<UsersService, IUsersService>(EndPointType.InProcess, EndPointCollectionName.ProjectManager.ToString());
 
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());

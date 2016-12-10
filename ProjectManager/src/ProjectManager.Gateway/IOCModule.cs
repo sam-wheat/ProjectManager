@@ -18,7 +18,7 @@ namespace ProjectManager.Gateway
             builder.RegisterType<HttpEndPointValidator>().Keyed<IEndPointValidator>(EndPointType.REST);
 
             builder.Register<Func<IEndPointConfiguration>>(c => { IComponentContext cxt = c.Resolve<IComponentContext>(); return () => cxt.Resolve<EndPointInstance>().CurrentEndPoint; });
-            builder.Register<Func<Type, IAPI>>(c => { IComponentContext cxt = c.Resolve<IComponentContext>(); return t => cxt.ResolveKeyed<IAPI>(t); });
+            builder.Register<Func<Type, IEndPointCollection>>(c => { IComponentContext cxt = c.Resolve<IComponentContext>(); return t => cxt.ResolveKeyed<IEndPointCollection>(t); });
             builder.Register<Func<EndPointType, IEndPointValidator>>(c => { IComponentContext cxt = c.Resolve<IComponentContext>(); return ep => cxt.ResolveKeyed<IEndPointValidator>(ep); });
             builder.RegisterType<EndPointInstance>().InstancePerLifetimeScope();
             builder.RegisterGeneric(typeof(ClientResolver<>)).As(typeof(IClientResolver<>));

@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac.Builder;
 
 namespace ProjectManager.Core
 {
     public interface IRegistrationHelper
     {
         void RegisterEndPoints(IEnumerable<IEndPointConfiguration> endPoints);
-        void RegisterService<TService, TInterface>(EndPointType endPointType, string apiName);     
+        IRegistrationBuilder<TService, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterService<TService, TInterface>(EndPointType endPointType, string endPointCollectionName);     
     }
 }

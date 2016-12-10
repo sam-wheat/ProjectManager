@@ -43,13 +43,13 @@ namespace ProjectManager.WPFClient
 
         private IEnumerable<IEndPointConfiguration> CreateEndPoints()
         {
-            string apiName = APIName.ProjectManager.ToString();
+            string epcName = EndPointCollectionName.ProjectManager.ToString();
 
             IEnumerable<IEndPointConfiguration> endPoints = new List<IEndPointConfiguration>
             {
-                new EndPointConfiguration {Name="Horrible_SQL", API_Name=apiName, EndPointType = EndPointType.InProcess, Preference = 3, IsActive=true, ConnectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=ProjectManager;Integrated Security=True;MultipleActiveResultSets=True"},
-                new EndPointConfiguration {Name="Horrible_REST", API_Name=apiName, EndPointType = EndPointType.REST, Preference = 2, IsActive=true, ConnectionString = "http://localhost:51513/"},
-                new EndPointConfiguration {Name="Horrible_WCF", API_Name=apiName, EndPointType = EndPointType.WCF, Preference = 1, IsActive=true, ConnectionString = "http://localhost:62136/"},
+                new EndPointConfiguration {Name="Horrible_SQL", Collection_Name=epcName, EndPointType = EndPointType.InProcess, Preference = 3, IsActive=true, ConnectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=ProjectManager;Integrated Security=True;MultipleActiveResultSets=True"},
+                new EndPointConfiguration {Name="Horrible_REST", Collection_Name=epcName, EndPointType = EndPointType.REST, Preference = 2, IsActive=true, ConnectionString = "http://localhost:51513/"},
+                new EndPointConfiguration {Name="Horrible_WCF", Collection_Name=epcName, EndPointType = EndPointType.WCF, Preference = 1, IsActive=true, ConnectionString = "http://localhost:62136/"},
             };
             return endPoints;
         }

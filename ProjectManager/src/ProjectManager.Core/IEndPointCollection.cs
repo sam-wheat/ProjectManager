@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace ProjectManager.Core
 {
-    public interface IAPI
+    public interface IEndPointCollection
     {
-        string API_Name { get; }
+        string Collection_Name { get; }
         IList<IEndPointConfiguration> EndPoints { get; }
     }
 }

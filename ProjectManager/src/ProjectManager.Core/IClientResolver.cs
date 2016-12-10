@@ -7,6 +7,6 @@ namespace ProjectManager.Core
 {
     public interface IClientResolver<T> 
     {
-        T ResolveClient();
+        T ResolveClient(params string[] overrideNames);
     }
 }

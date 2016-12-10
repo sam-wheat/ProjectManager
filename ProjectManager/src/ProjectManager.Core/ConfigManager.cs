@@ -89,8 +89,8 @@ namespace ProjectManager.Core
             if (endPoints.Any(x => string.IsNullOrEmpty(x.Name)))
                 throw new Exception("One or more EndPointConfigurations has a blank name.  Name is required for all EndPointConfigurations");
 
-            if (endPoints.Any(x => string.IsNullOrEmpty(x.API_Name)))
-                throw new Exception("One or more EndPointConfigurations has a blank API name.  API Name is required for all EndPointConfigurations");
+            if (endPoints.Any(x => string.IsNullOrEmpty(x.Collection_Name)))
+                throw new Exception("One or more EndPointConfigurations has a blank Collection name.  Collection Name is required for all EndPointConfigurations");
 
             var dupes = endPoints.GroupBy(x => new { x.Name }).Where(x => x.Count() > 1);
 

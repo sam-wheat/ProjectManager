@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManager.Domain
 {
-    public enum APIName
+    public enum EndPointCollectionName
     {
         ProjectManager,
         Twitter

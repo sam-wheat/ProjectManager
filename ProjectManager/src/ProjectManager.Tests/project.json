@@ -1,23 +1,23 @@
 {
   "version": "1.0.0-*",
   "dependencies": {
+    "Autofac": "4.2.1",
+    "dotnet-test-nunit": "3.4.0-beta-1",
+    "Microsoft.AspNetCore.TestHost": "1.1.0",
+    "Microsoft.Extensions.PlatformAbstractions": "1.1.0",
+    "Moq": "4.6.38-alpha",
+    "NETStandard.Library": "1.6.1",
+    "NUnit": "3.4.0",
     "ProjectManager.Core": "1.0.0-*",
     "ProjectManager.Domain": "1.0.0-*",
     "ProjectManager.Gateway": "1.0.0-*",
     "ProjectManager.Model": "1.0.0-*",
     "ProjectManager.Services": "1.0.0-*",
     "ProjectManager.Services.REST": "1.0.0-*",
-    "NUnit": "3.5.0",
-    "dotnet-test-nunit": "3.4.0-beta-3",
-    "Moq": "4.6.38-alpha",
-    "Autofac": "4.2.1",
-    "Microsoft.Extensions.PlatformAbstractions": "1.1.0",
-    "NETStandard.Library": "1.6.1",
     "ProjectManager.Services.WCF": "1.0.0-*"
   },
-  "runtimes": {
-    "win10-x64": {}
-  },
+  "testRunner": "nunit",
+
   "frameworks": {
     "netcoreapp1.1": {
       "imports": [
@@ -25,7 +25,10 @@
         "portable-net45+win8"
       ],
       "dependencies": {
-        "Microsoft.NETCore.App": "1.1.0",
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.1.0"
+        },
         "System.ServiceModel.Duplex": "4.3.0",
         "System.ServiceModel.Http": "4.3.0",
         "System.ServiceModel.NetTcp": "4.3.0",
@@ -38,8 +41,11 @@
         "System.Runtime.Serialization": "4.0.0.0",
         "System.ServiceModel": "4.0.0.0",
         "System.Xml": "4.0.0.0"
+      },
+      "dependencies": {
+        "System.Diagnostics.Process": "4.3.0"
       }
     }
-  },
-  "testRunner": "nunit"
+  }
+
 }

@@ -1,43 +1,47 @@
 {
   "dependencies": {
-    "ProjectManager.Core": "1.0.0-*",
-    "ProjectManager.Domain": "1.0.0-*",
-    "ProjectManager.Gateway": "1.0.0-*",
-    "ProjectManager.Model": "1.0.0-*",
-    "ProjectManager.Services": "1.0.0-*",
+    "Autofac": "4.2.1",
     "Autofac.Extensions.DependencyInjection": "4.0.0",
     "Microsoft.AspNetCore.Mvc": "1.1.0",
+    "Microsoft.AspNetCore.Routing": "1.1.0",
     "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
     "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
     "Microsoft.AspNetCore.Session": "1.1.0",
     "Microsoft.Extensions.Configuration.CommandLine": "1.1.0",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0",
     "Microsoft.Extensions.Configuration.FileExtensions": "1.1.0",
+    "Microsoft.Extensions.Configuration.Json": "1.1.0",
     "Microsoft.Extensions.DependencyInjection": "1.1.0",
     "Microsoft.Extensions.Logging": "1.1.0",
     "Microsoft.Extensions.Logging.Console": "1.1.0",
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
-    "Microsoft.NETCore.App": "1.1.0",
-    "Autofac": "4.2.1",
-    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0",
-    "Microsoft.Extensions.Configuration.Json": "1.1.0",
+    
+    "ProjectManager.Core": "1.0.0-*",
+    "ProjectManager.Domain": "1.0.0-*",
+    "ProjectManager.Gateway": "1.0.0-*",
+    "ProjectManager.Model": "1.0.0-*",
+    "ProjectManager.Services": "1.0.0-*",
     "ProjectManager.Services.REST": "1.0.0-*"
   },
 
   "tools": {
   },
-
-  "runtimes": {
-    "win10-x64": { } 
-  },
-
+ 
   "frameworks": {
     "netcoreapp1.1": {
       "imports": [
         "dotnet5.6",
         "portable-net45+win8"
-      ]
-    }
+      ],
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.1.0"
+        }
+      }
+    },
+    "net462": {}
   },
 
   "buildOptions": {

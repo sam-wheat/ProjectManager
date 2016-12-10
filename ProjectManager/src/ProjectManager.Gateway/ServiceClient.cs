@@ -16,42 +16,42 @@ namespace ProjectManager.Gateway
             this.container = container;
         }
 
-        public void Try(Action<T> method)
+        public void Try(Action<T> method, params string[] endPointNames)
         {
             using (ILifetimeScope scope = container.BeginLifetimeScope())
             {
                 IClientResolver<T> resolver = scope.Resolve<IClientResolver<T>>();
-                T client = resolver.ResolveClient();
+                T client = resolver.ResolveClient(endPointNames);
                 method(client);
             }
         }
 
-        public TResult Try<TResult>(Func<T, TResult> method)
+        public TResult Try<TResult>(Func<T, TResult> method, params string[] endPointNames)
         {
             using (ILifetimeScope scope = container.BeginLifetimeScope())
             {
                 IClientResolver<T> resolver = scope.Resolve<IClientResolver<T>>();
-                T client = resolver.ResolveClient();
+                T client = resolver.ResolveClient(endPointNames);
                 return method(client);
             }
         }
 
-        public async Task TryAsync(Func<T, Task> method)
+        public async Task TryAsync(Func<T, Task> method, params string[] endPointNames)
         {
             using (ILifetimeScope scope = container.BeginLifetimeScope())
             {
                 IClientResolver<T> resolver = scope.Resolve<IClientResolver<T>>();
-                T client = resolver.ResolveClient();
+                T client = resolver.ResolveClient(endPointNames);
                 await method(client);
             }
         }
 
-        public async Task<TResult> TryAsync<TResult>(Func<T, Task<TResult>> method)
+        public async Task<TResult> TryAsync<TResult>(Func<T, Task<TResult>> method, params string[] endPointNames)
         {
             using (ILifetimeScope scope = container.BeginLifetimeScope())
             {
                 IClientResolver<T> resolver = scope.Resolve<IClientResolver<T>>();
-                T client = resolver.ResolveClient();
+                T client = resolver.ResolveClient(endPointNames);
                 return await method(client);
             }
         }

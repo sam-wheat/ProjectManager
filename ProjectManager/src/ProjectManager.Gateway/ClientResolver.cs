@@ -8,39 +8,45 @@ namespace ProjectManager.Gateway
 {
     public class ClientResolver<T> : IClientResolver<T>
     {
-        private Func<Type, IAPI> apiFactory;
+        private Func<Type, IEndPointCollection> epcFactory;
         private Func<EndPointType, T> serviceFactory;
         private Func<EndPointType, IEndPointValidator> validatorFactory;
         private EndPointInstance endPointInstance;
 
         public ClientResolver(
-            Func<Type, IAPI> apiFactory,
+            Func<Type, IEndPointCollection> epcFactory,
             Func<EndPointType, T> serviceFactory,
             Func<EndPointType, IEndPointValidator> validatorFactory,
             EndPointInstance endPointInstance
             )
         {
-            this.apiFactory = apiFactory;
+            this.epcFactory = epcFactory;
             this.serviceFactory = serviceFactory;
             this.validatorFactory = validatorFactory;
             this.endPointInstance = endPointInstance;
         }
 
         /// <summary>
-        /// Given a service interface (IOrdersService), we find an API (MyStore).
-        /// Given the API, we find an EndPoint.
+        /// Given a service interface (IOrdersService), we find an EndPointCollection that implements the interface.
+        /// Given the EndPointCollection, we find an EndPoint.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public virtual T ResolveClient()
+        public virtual T ResolveClient(params string[] overrideNames)
         {
             T client = default(T);
-            IAPI api = apiFactory(typeof(T));
+            IEndPointCollection epc = epcFactory(typeof(T));
+            IEnumerable<IEndPointConfiguration> endPoints;
 
-            if (api == null)
+            if (epc == null)
                 return client;
 
-            foreach (IEndPointConfiguration endPoint in api.EndPoints)
+            if (overrideNames != null && overrideNames.Any())
+                endPoints = epc.EndPoints.Where(x => overrideNames.Any(o => x.Name == o));
+            else
+                endPoints = epc.EndPoints;
+
+            foreach (IEndPointConfiguration endPoint in endPoints)
             {
                 IEndPointValidator validator = validatorFactory(endPoint.EndPointType);
 

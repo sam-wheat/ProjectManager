@@ -18,9 +18,9 @@ namespace ProjectManager.Services.REST
 
         public void Register()
         {
-            string apiName = APIName.ProjectManager.ToString();
+            string epcName = EndPointCollectionName.ProjectManager.ToString();
             EndPointType endPointType = EndPointType.REST;
-            registrationHelper.RegisterService<UsersService, IUsersService>(endPointType, apiName);
+            registrationHelper.RegisterService<UsersService, IUsersService>(endPointType, epcName);
         }
     }
 }
