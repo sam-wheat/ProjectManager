@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
+using System.IO;
+using Newtonsoft.Json;
 using Autofac;
 using Autofac.Integration.Wcf;
 using ProjectManager.Core;
@@ -24,11 +26,11 @@ namespace ProjectManager.WCF
         {
             ContainerBuilder builder = new ContainerBuilder();
             AutofacRegistrationHelper registrationHelper = new AutofacRegistrationHelper(builder);
-            registrationHelper.RegisterEndPoints(CreateEndPoints());
+            registrationHelper.RegisterEndPoints(ReadEndPoints());
             new ProjectManager.Services.ServiceRegistry(registrationHelper).Register();
             new Services.REST.ServiceRegistry(registrationHelper).Register();
             new ServiceRegistry(registrationHelper).Register();
-            builder.RegisterType<UsersService>();
+            builder.RegisterType<UsersService>();  // Required so Autofac can resolve the service when user requests .svc
 
 
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
@@ -79,6 +81,13 @@ namespace ProjectManager.WCF
                 new EndPointConfiguration {Name="Horrible_REST", Collection_Name=epcName, EndPointType = EndPointType.REST, Preference = 2, IsActive=true, ConnectionString = "http://localhost:51513/"},
             };
             return endPoints;
+        }
+
+        private IEnumerable<IEndPointConfiguration> ReadEndPoints()
+        {
+            string fileName = System.Web.Hosting.HostingEnvironment.MapPath("~/appsettings.json");
+            List<EndPointConfiguration> configs = JsonConvert.DeserializeObject<List<EndPointConfiguration>>(File.ReadAllText(fileName));
+            return configs;
         }
     }
 }

@@ -8,13 +8,13 @@
     "Moq": "4.6.38-alpha",
     "NETStandard.Library": "1.6.1",
     "NUnit": "3.4.0",
-    "ProjectManager.Core": "1.0.0-*",
-    "ProjectManager.Domain": "1.0.0-*",
-    "ProjectManager.Gateway": "1.0.0-*",
-    "ProjectManager.Model": "1.0.0-*",
-    "ProjectManager.Services": "1.0.0-*",
-    "ProjectManager.Services.REST": "1.0.0-*",
-    "ProjectManager.Services.WCF": "1.0.0-*"
+    "ProjectManager.Core": { "target": "project" },
+    "ProjectManager.Domain": { "target": "project" },
+    "ProjectManager.Gateway": { "target": "project" },
+    "ProjectManager.Model": { "target": "project" },
+    "ProjectManager.Services": { "target": "project" },
+    "ProjectManager.Services.REST": { "target": "project" },
+    "ProjectManager.Services.WCF": { "target": "project" }
   },
   "testRunner": "nunit",
 

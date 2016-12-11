@@ -3,8 +3,8 @@
 
   "dependencies": {
     "NETStandard.Library": "1.6.1",
-    "ProjectManager.Core": "1.0.0-*",
-    "ProjectManager.Model": "1.0.0-*",
+    "ProjectManager.Core": { "target": "project" },
+    "ProjectManager.Model": { "target": "project" },
     "System.ServiceModel.Primitives": "4.3.0"
   },
 
