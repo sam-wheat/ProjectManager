@@ -24,7 +24,7 @@ namespace ProjectManager.API
         public IConfigurationRoot Configuration { get; }
 
         public Startup(IHostingEnvironment env)
-        {
+        { 
             Configuration = ConfigManager.GetConfigurationRoot();
         }
 

@@ -11,13 +11,13 @@ namespace ProjectManager.Gateway
         private Func<Type, IEndPointCollection> epcFactory;
         private Func<EndPointType, T> serviceFactory;
         private Func<EndPointType, IEndPointValidator> validatorFactory;
-        private EndPointInstance endPointInstance;
+        private EndPointContext endPointInstance;
 
         public ClientResolver(
             Func<Type, IEndPointCollection> epcFactory,
             Func<EndPointType, T> serviceFactory,
             Func<EndPointType, IEndPointValidator> validatorFactory,
-            EndPointInstance endPointInstance
+            EndPointContext endPointInstance
             )
         {
             this.epcFactory = epcFactory;

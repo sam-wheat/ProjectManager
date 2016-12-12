@@ -138,7 +138,7 @@ namespace ProjectManager.Tests
         }
 
         [Test]
-        public void WCF_EndPointOverRide()
+        public void WCF_EndPointOverride()
         {
             //Process server = new Process { StartInfo = new ProcessStartInfo("C:\\Git\\ProjectManager\\ProjectManager\\src\\ProjectManager.Tests\\StartWebAPI.bat") };
             //server.Start();
@@ -168,5 +168,7 @@ namespace ProjectManager.Tests
             Assert.IsNotNull(userResult.Data);
             Assert.AreEqual("User 1", userResult.Data.Name);
         }
+
+        
     }
 }

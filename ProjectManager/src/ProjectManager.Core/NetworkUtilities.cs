@@ -63,10 +63,15 @@ namespace ProjectManager.Core
 
             if (IsNetworkAvailable())
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                request.Method = "Head";
-                HttpWebResponse response = (HttpWebResponse)request.GetResponseAsync().Result;
+                HttpClient httpClient = new HttpClient();
+                HttpRequestMessage msg = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
+                HttpResponseMessage response = httpClient.SendAsync(msg).Result;
                 success = response.StatusCode == HttpStatusCode.OK;
+
+                //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                ////request.Method = "Head";
+                //HttpWebResponse response = (HttpWebResponse)request.GetResponseAsync().Result;
+                //success = response.StatusCode == HttpStatusCode.OK;
             }
             return success;
         }

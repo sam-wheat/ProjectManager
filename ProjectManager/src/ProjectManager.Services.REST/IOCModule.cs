@@ -15,7 +15,6 @@ namespace ProjectManager.Services.REST
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
-            builder.RegisterType<UsersService>().Keyed<IUsersService>(EndPointType.REST);
         }
     }
 }

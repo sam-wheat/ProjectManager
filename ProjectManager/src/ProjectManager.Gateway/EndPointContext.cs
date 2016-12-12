@@ -6,7 +6,7 @@ using ProjectManager.Core;
 
 namespace ProjectManager.Gateway
 {
-    public class EndPointInstance
+    public class EndPointContext
     {
         public IEndPointConfiguration CurrentEndPoint { get; set; }
     }

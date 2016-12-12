@@ -2,9 +2,9 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "ProjectManager.Core": "1.0.0-*",
-    "ProjectManager.Domain": "1.0.0-*",
-    "ProjectManager.Model": "1.0.0-*",
+    "ProjectManager.Core": { "target": "project" },
+    "ProjectManager.Domain": { "target": "project" },
+    "ProjectManager.Model": { "target": "project" },
     "Newtonsoft.Json": "9.0.1",
     "Autofac": "4.2.1",
     "NETStandard.Library": "1.6.1"
