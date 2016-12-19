@@ -55,7 +55,7 @@ namespace ProjectManager.API
             builder.RegisterModule(new ProjectManager.Core.IOCModule());
             builder.RegisterModule(new ProjectManager.Services.IOCModule());
             builder.RegisterModule(new ProjectManager.Gateway.IOCModule());
-            builder.Populate(services);
+            
             AutofacRegistrationHelper registrationHelper = new AutofacRegistrationHelper(builder);
             registrationHelper.RegisterEndPoints(ConfigManager.EndPoints);
             new Services.ServiceRegistry(registrationHelper).Register();
@@ -65,7 +65,7 @@ namespace ProjectManager.API
             // Make sure the database exists
             //IServiceClient<IDatabaseUtilitiesService> utilities = container.Resolve<IServiceClient<IDatabaseUtilitiesService>>();
             //utilities.Try(x => x.RecreateDb());
-
+            builder.Populate(services);
             return container.Resolve<IServiceProvider>();
         }
 
